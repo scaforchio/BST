@@ -105,16 +105,8 @@ public class BST {
         }
     }
 
-    public int numeroNodi() {
-        if (Radice == null)
 
-            return 0;
-
-        else
-            return 1 + numeroNodi(Radice.getSinistra()) + numeroNodi(Radice.getDestra());
-    }
-
-    private int numeroNodi(NodoBT r) {
+    public static int numeroNodi(NodoBT r) {
         if (r != null)
 
             return 1 + numeroNodi(r.getSinistra()) + numeroNodi(r.getDestra());
@@ -148,6 +140,7 @@ public class BST {
     }
 
     private void tabella(NodoBT r) {
+
         if (r != null) {
             pos++;
 
