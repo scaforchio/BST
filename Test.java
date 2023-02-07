@@ -30,11 +30,8 @@ public class Test {
                            break;
                 case "TAB":tabella(a);
                            break;
-
             }
         }
-
-
     }
 
     static void sleep(int msec) {
@@ -51,19 +48,17 @@ public class Test {
     }
 
     public static void tabella(BST t) {
-
+        BSTTab.clear();
+        pos=0;
         NodoBT r=t.getRadice();
         if (r != null)
             tabella(r);
         FinestraBTTab a=new FinestraBTTab(BSTTab);
-
     }
 
     private static void tabella(NodoBT r) {
         pos++;
         if (r != null) {
-
-
             if (r.getSinistra() == null && r.getDestra() == null)
                 BSTTab.add(new Riga(pos,r.getInfo().toString(),0,0));
             if (r.getSinistra() != null && r.getDestra() == null) {
@@ -81,8 +76,5 @@ public class Test {
                 tabella(r.getDestra());
             }
         }
-
-
     }
-
 }

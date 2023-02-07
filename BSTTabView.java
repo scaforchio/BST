@@ -12,9 +12,6 @@ public class BSTTabView extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
 
         add(scrollPane);
-
-
-
     }
 
 }

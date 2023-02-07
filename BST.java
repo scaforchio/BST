@@ -133,36 +133,6 @@ public class BST {
         }
     }
 
-    public void tabella() {
-        if (Radice != null)
-            tabella(Radice);
-        pos = 0;
-    }
-
-    private void tabella(NodoBT r) {
-
-        if (r != null) {
-            pos++;
-
-            if (r.getSinistra() == null && r.getDestra() == null)
-                System.out.println(pos + " - " + r.getInfo() + " - 0 - 0");
-            if (r.getSinistra() != null && r.getDestra() == null) {
-                System.out.println(pos + " - " + r.getInfo() + " - " + (pos + 1) + " - 0");
-                tabella(r.getSinistra());
-            }
-            if (r.getSinistra() == null && r.getDestra() != null) {
-                System.out.println(pos + " - " + r.getInfo() + " - 0 - " + (pos + 1 + numeroNodi(r.getSinistra())));
-                tabella(r.getDestra());
-            }
-            if (r.getSinistra() != null && r.getDestra() != null) {
-                System.out.println(pos + " - " + r.getInfo() + " - " + (pos + 1) + " - " + (pos + 1 + numeroNodi(r.getSinistra())));
-                tabella(r.getSinistra());
-                tabella(r.getDestra());
-            }
-        } else {
-        }
-    }
-
     public void cancellaNodo(Comparable c) {
         Radice = cancellaNodo(Radice, c);
     }
