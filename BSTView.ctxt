@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=BSTView
+comment1.params=root\ x\ y\ size
+comment1.target=BSTView(NodoBT,\ int,\ int,\ int)
+comment2.params=g
+comment2.target=void\ paintComponent(java.awt.Graphics)
+comment3.params=g\ node\ x\ y\ size\ dist
+comment3.target=void\ drawTree(java.awt.Graphics,\ NodoBT,\ int,\ int,\ int,\ int)
+comment4.params=g\ x\ y\ r\ contenuto
+comment4.target=void\ drawNodo(java.awt.Graphics,\ int,\ int,\ int,\ java.lang.String)
+numComments=5
