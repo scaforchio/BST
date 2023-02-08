@@ -28,11 +28,13 @@ public class BST {
     }
 
     public void inserisciNodo(Comparable o) {
-        if (Radice == null) {
-            Radice = new NodoBT(o);
-            return;
+        if (ricercaDato(o)==null) {
+            if (Radice == null) {
+                Radice = new NodoBT(o);
+                return;
+            }
+            inserisciNodo(new NodoBT(o), Radice);
         }
-        inserisciNodo(new NodoBT(o), Radice);
     }
 
     private void inserisciNodo(NodoBT n, NodoBT r) {

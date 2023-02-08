@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class BSTView extends JPanel {
 
@@ -7,13 +8,18 @@ public class BSTView extends JPanel {
     private final int y;
     private final int size;
     private int dist;
-    private final NodoBT root;
-    public BSTView(NodoBT root, int x, int y, int size) {
-        this.root = root;
+    private NodoBT root;
+    private BST a;
+    private String modo;
+    ArrayList<Riga> BSTTab;
+    public BSTView(BST a, int x, int y, int size, String modo, ArrayList<Riga> BSTTab) {
+        this.a=a;
+        this.root = a.getRadice();
         //  this.x = x;
         this.y = y;
         this.size = size;
         this.dist = x / 2;
+        this.modo=modo;
 
         setBackground(Color.white);
 
@@ -22,36 +28,50 @@ public class BSTView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        this.x = this.getWidth() / 2;
-        dist = x / 2;
-        g.setFont(new Font("Courier", Font.BOLD, 20));
-        drawTree(g, root, x, y, size, dist);
+        if (modo.equals("tree")) {
+            System.out.println("qui");
+            this.root = a.getRadice();
+            this.x = this.getWidth() / 2;
+            dist = x / 2;
+            g.setFont(new Font("Courier", Font.BOLD, 20));
+            drawTree(g, root, x, y, size, dist);
+        }
+        else
+        {
+            this.BSTTab = BSTTab;
+            JTable table = new JTable(new ModelloBSTTab(BSTTab));
+            JScrollPane scrollPane = new JScrollPane(table);
+            this.add(scrollPane);
+
+        }
     }
 
     private void drawTree(Graphics g, NodoBT node, int x, int y, int size, int dist) {
 
         ((Graphics2D) g).setStroke(new BasicStroke(3.0f));
-        drawNodo(g, x, y, size / 2, node.getInfo().toString());
+        if (node!=null) {
+            drawNodo(g, x, y, size / 2, node.getInfo().toString());
 
-        if (node.getSinistra() != null) {
-            int x1 = x - dist;
-            int y1 = y + size * 2;
+            if (node.getSinistra() != null) {
+                int x1 = x - dist;
+                int y1 = y + size * 2;
 
-            g.drawLine(x, y + size / 2, x1, y1 - size / 2);
-            drawTree(g, node.getSinistra(), x1, y1, size, dist / 2);
-        }
-        if (node.getDestra() != null) {
-            int x2 = x + dist;
-            int y2 = y + size * 2;
+                g.drawLine(x, y + size / 2, x1, y1 - size / 2);
+                drawTree(g, node.getSinistra(), x1, y1, size, dist / 2);
+            }
+            if (node.getDestra() != null) {
+                int x2 = x + dist;
+                int y2 = y + size * 2;
 
-            g.drawLine(x, y + size / 2, x2, y2 - size / 2);
-            drawTree(g, node.getDestra(), x2, y2, size, dist / 2);
-        }
-        if (node.getSinistra() != null) {
-            drawTree(g, node.getSinistra(), x - dist, y + size * 2, size, dist / 2);
-        }
-        if (node.getDestra() != null) {
-            drawTree(g, node.getDestra(), x + dist, y + size * 2, size, dist / 2);
+                g.drawLine(x, y + size / 2, x2, y2 - size / 2);
+                drawTree(g, node.getDestra(), x2, y2, size, dist / 2);
+            }
+            if (node.getSinistra() != null) {
+                drawTree(g, node.getSinistra(), x - dist, y + size * 2, size, dist / 2);
+            }
+            if (node.getDestra() != null) {
+                drawTree(g, node.getDestra(), x + dist, y + size * 2, size, dist / 2);
+            }
         }
       //  if (getHeight()<y+size*2) setPreferredSize(new Dimension(getWidth()-20,y+size*2));
 
@@ -69,5 +89,7 @@ public class BSTView extends JPanel {
         g.drawString(contenuto, x - (lungContenuto * 13) / 2 + 2, y + 8);
 
     }
+
+
 
 }

@@ -10,8 +10,11 @@ import java.util.ArrayList;
 public class Test {
     static int pos=0;
     static ArrayList<Riga> BSTTab = new ArrayList<Riga>();
-    public static void main(String[] args) throws Exception{
-        BufferedReader comandi=new BufferedReader(new FileReader("comandi.txt"));
+    public static void main(String[] args) throws Exception {
+        BST a = new BST();
+        FinestraBT f = new FinestraBT(a);
+    }
+     /*   BufferedReader comandi=new BufferedReader(new FileReader("comandi.txt"));
         String line;
         String[] comando = new String[2];
         BST a = new BST();
@@ -76,5 +79,5 @@ public class Test {
                 tabella(r.getDestra());
             }
         }
-    }
+    } */
 }
