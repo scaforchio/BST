@@ -83,8 +83,9 @@ public class FinestraBT extends JFrame implements ActionListener {
             info=info.trim();
             albero.inserisciNodo(info);
         }
-
-        v.repaint();
+        tabella(albero);
+        v.ridisegna(JTBTab.isSelected());
+        // v.repaint();
 
     }
     private void eliminaNodi()
@@ -96,20 +97,24 @@ public class FinestraBT extends JFrame implements ActionListener {
             info=info.trim();
             albero.cancellaNodo(info);
         }
-
-        v.repaint();
+        tabella(albero);
+        v.ridisegna(JTBTab.isSelected());
+        // v.repaint();
 
     }
     private void bilanciaAlbero()
     {
           albero.bilanciamento();
-
-          v.repaint();
+          tabella(albero);
+          v.ridisegna(JTBTab.isSelected());
+         // v.repaint();
 
     }
     private void visualizzaTabella()
     {
 
+        tabella(albero);
+        v.ridisegna(JTBTab.isSelected());
 
     }
     public void tabella(BST t) {
@@ -118,7 +123,7 @@ public class FinestraBT extends JFrame implements ActionListener {
         NodoBT r=t.getRadice();
         if (r != null)
             tabella(r);
-        FinestraBTTab a=new FinestraBTTab(BSTTab);
+        //FinestraBTTab a=new FinestraBTTab(BSTTab);
     }
 
     private void tabella(NodoBT r) {

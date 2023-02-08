@@ -11,7 +11,10 @@ public class BSTView extends JPanel {
     private NodoBT root;
     private BST a;
     private String modo;
+    private Boolean tabella=false;
     ArrayList<Riga> BSTTab;
+    JTable table;
+    JScrollPane scrollPane;
     public BSTView(BST a, int x, int y, int size, String modo, ArrayList<Riga> BSTTab) {
         this.a=a;
         this.root = a.getRadice();
@@ -20,7 +23,10 @@ public class BSTView extends JPanel {
         this.size = size;
         this.dist = x / 2;
         this.modo=modo;
-
+        this.BSTTab=BSTTab;
+        table = new JTable(new ModelloBSTTab(BSTTab));
+        scrollPane = new JScrollPane(table);
+        this.add(scrollPane);
         setBackground(Color.white);
 
     }
@@ -28,7 +34,8 @@ public class BSTView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (modo.equals("tree")) {
+        if (!tabella) {
+            scrollPane.setVisible(false);
             System.out.println("qui");
             this.root = a.getRadice();
             this.x = this.getWidth() / 2;
@@ -38,12 +45,17 @@ public class BSTView extends JPanel {
         }
         else
         {
-            this.BSTTab = BSTTab;
-            JTable table = new JTable(new ModelloBSTTab(BSTTab));
-            JScrollPane scrollPane = new JScrollPane(table);
+            //this.BSTTab = BSTTab;
+            scrollPane.setVisible(true);
             this.add(scrollPane);
 
         }
+    }
+
+    public void ridisegna(boolean tabella)
+    {
+        this.tabella=tabella;
+        repaint();
     }
 
     private void drawTree(Graphics g, NodoBT node, int x, int y, int size, int dist) {
