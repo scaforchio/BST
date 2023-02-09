@@ -1,8 +1,0 @@
-#BlueJ class context
-comment0.target=Test
-comment0.text=\n\ Aggiungi\ qui\ una\ descrizione\ della\ classe\ Auto\n\ \n\ @author\ (il\ tuo\ nome)\ \n\ @version\ (un\ numero\ di\ versione\ o\ una\ data)\n
-comment1.params=args
-comment1.target=void\ main(java.lang.String[])
-comment2.params=msec
-comment2.target=void\ sleep(int)
-numComments=3
