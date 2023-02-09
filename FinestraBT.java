@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 /**
@@ -12,9 +11,8 @@ import java.util.ArrayList;
  * @version (un numero di versione o una data)
  */
 public class FinestraBT extends JFrame implements ActionListener {
-
-    JTextField JTFNodiDaAggiungere;
-    JToggleButton JTBTab;
+    JTextField JTFNodiDaElaborare;
+    JCheckBox JTBTab;
     JLabel JLConsole;
     BSTView v;
     BST albero;
@@ -29,7 +27,6 @@ public class FinestraBT extends JFrame implements ActionListener {
         else
             setTitle("Albero vuoto");
         v = new BSTView(albero, 600, 40, 50,"tree",BSTTab);
-
         JScrollPane SP = new JScrollPane(v);
         Container CP=getContentPane();
         CP.setLayout(new BorderLayout());
@@ -37,29 +34,28 @@ public class FinestraBT extends JFrame implements ActionListener {
         JPanel JPConsole=new JPanel();
         JPConsole.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel JLNodi=new JLabel("Nodes (separated by commas)");
-        JTFNodiDaAggiungere = new JTextField();
-        JTFNodiDaAggiungere.setColumns(30);
+        JTFNodiDaElaborare = new JTextField();
+        JTFNodiDaElaborare.setColumns(30);
         JButton JBAdd = new JButton("Add");
         JBAdd.addActionListener(this);
         JButton JBDel = new JButton("Del");
         JBDel.addActionListener(this);
         JButton JBBil = new JButton("Balance");
         JBBil.addActionListener(this);
-        JTBTab = new JToggleButton("Table");
+        JTBTab = new JCheckBox("Table");
+
         JTBTab.addActionListener(this);
+      //  JTBTab = new JToggleButton("Table");
+      //  JTBTab.addActionListener(this);
         JButton JBInorder = new JButton("Inorder");
         JBInorder.addActionListener(this);
         JButton JBPreorder = new JButton("Preorder");
         JBPreorder.addActionListener(this);
         JButton JBPostorder = new JButton("Postorder");
         JBPostorder.addActionListener(this);
-
-
-
         JPConsole.add(JLNodi);
-        JPConsole.add(JTFNodiDaAggiungere);
+        JPConsole.add(JTFNodiDaElaborare);
         JPConsole.add(JBAdd);
-
         JPConsole.add(JBDel);
         JPConsole.add(JBBil);
         JPConsole.add(JTBTab);
@@ -69,7 +65,6 @@ public class FinestraBT extends JFrame implements ActionListener {
         JLConsole=new JLabel("<html><br><br><br><br></html>");
         CP.add(JPConsole, BorderLayout.NORTH);
         CP.add(JLConsole,BorderLayout.SOUTH);
-
         setVisible(true);
     }
 
@@ -78,21 +73,23 @@ public class FinestraBT extends JFrame implements ActionListener {
         String comando=actionEvent.getActionCommand();
         switch (comando)
         {
-            case "Add": aggiungiNodi(); break;
-            case "Del": eliminaNodi(); break;
+            case "Add": if (!JTFNodiDaElaborare.getText().trim().equals("")) aggiungiNodi(); break;
+            case "Del": if (!JTFNodiDaElaborare.getText().trim().equals("")) eliminaNodi(); break;
             case "Balance": bilanciaAlbero(); break;
             case "Table": visualizzaTabella(); break;
             case "Inorder": inOrder(); break;
             case "Preorder": preOrder(); break;
             case "Postorder": postOrder(); break;
         }
+        JTFNodiDaElaborare.setText("");
     }
 
     private void aggiungiNodi()
     {
-        System.out.println("Qui");
-        String nodiDaAggiungere=JTFNodiDaAggiungere.getText();
+
+        String nodiDaAggiungere=JTFNodiDaElaborare.getText();
         String[] elencoNodi=nodiDaAggiungere.split(",");
+
         for (String info:elencoNodi) {
             info=info.trim();
             albero.inserisciNodo(info);
@@ -100,13 +97,13 @@ public class FinestraBT extends JFrame implements ActionListener {
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
         svuotaConsole();
-        // v.repaint();
 
     }
     private void eliminaNodi()
     {
-        String nodiDaEliminare=JTFNodiDaAggiungere.getText();
+        String nodiDaEliminare=JTFNodiDaElaborare.getText();
         String[] elencoNodi=nodiDaEliminare.split(",");
+        JTFNodiDaElaborare.setText("");
 
         for (String info:elencoNodi) {
             info=info.trim();
@@ -115,7 +112,6 @@ public class FinestraBT extends JFrame implements ActionListener {
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
         svuotaConsole();
-        // v.repaint();
 
     }
     private void bilanciaAlbero()
@@ -123,13 +119,11 @@ public class FinestraBT extends JFrame implements ActionListener {
           albero.bilanciamento();
           tabella(albero);
           v.ridisegna(JTBTab.isSelected());
-         // v.repaint();
           svuotaConsole();
 
     }
     private void visualizzaTabella()
     {
-
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
         svuotaConsole();
@@ -155,7 +149,6 @@ public class FinestraBT extends JFrame implements ActionListener {
             }
             if (r.getSinistra() == null && r.getDestra() != null) {
                 BSTTab.add(new Riga(pos,r.getInfo().toString(),0,(pos + 1 + BST.numeroNodi(r.getSinistra()))));
-
                 tabella(r.getDestra());
             }
             if (r.getSinistra() != null && r.getDestra() != null) {
@@ -168,46 +161,46 @@ public class FinestraBT extends JFrame implements ActionListener {
 
     public void inOrder()
     {
-        String messaggio="<html><br>INORDER: ";
+        String messaggio="<html><br><b>INORDER: ";
         ArrayList <Comparable> lista=albero.attraversamentoSimmetrico();
         for(int i=0;i<lista.size();i++)
         {
             messaggio+="  "+lista.get(i).toString();
         }
-        messaggio+="<br><br></html>";
+        messaggio+="<br><br></b></html>";
         JLConsole.setText(messaggio);
     }
 
     public void postOrder()
     {
-        String messaggio="<html><br>POSTORDER: ";
+        String messaggio="<html><br><b>POSTORDER: ";
         ArrayList <Comparable> lista=albero.attraversamentoPosticipato();
         for(int i=0;i<lista.size();i++)
         {
             messaggio+="  "+lista.get(i).toString();
         }
-        messaggio+="<br><br></html>";
+        messaggio+="<br><br></b></html>";
         JLConsole.setText(messaggio);
 
     }
     public void preOrder()
     {
-        String messaggio="<html><br>PREORDER: ";
+        String messaggio="<html><br><b>PREORDER: ";
         ArrayList <Comparable> lista=albero.attraversamentoAnticipato();
         for(int i=0;i<lista.size();i++)
         {
             messaggio+="  "+lista.get(i).toString();
         }
-        messaggio+="<br><br></html>";
+        messaggio+="<br><br></b></html>";
         JLConsole.setText(messaggio);
 
     }
 
     public void svuotaConsole()
     {
-        String messaggio="<html><br>";
+        String messaggio="<html><br><b>";
 
-        messaggio+="<br><br></html>";
+        messaggio+="<br><br></b></html>";
         JLConsole.setText(messaggio);
 
     }

@@ -8,8 +8,7 @@ import java.util.ArrayList;
  */
 public class BST {
     NodoBT Radice;
-    int pos = 0;
-    ArrayList<Comparable> lista = new ArrayList();
+    ArrayList <Comparable> lista = new ArrayList<Comparable>();
 
     public BST() {
         Radice = null;
@@ -71,7 +70,7 @@ public class BST {
             return ricercaDato(dato, r.getSinistra());
     }
 
-    public ArrayList attraversamentoAnticipato() {
+    public ArrayList<Comparable> attraversamentoAnticipato() {
         lista.clear();
         if (Radice == null)
             return null;
@@ -89,7 +88,7 @@ public class BST {
         }
     }
 
-    public ArrayList attraversamentoSimmetrico() {
+    public ArrayList<Comparable> attraversamentoSimmetrico() {
         lista.clear();
         if (Radice == null)
             return null;
@@ -117,7 +116,7 @@ public class BST {
             return 0;
     }
 
-    public ArrayList attraversamentoPosticipato() {
+    public ArrayList<Comparable> attraversamentoPosticipato() {
         lista.clear();
         if (Radice == null)
             return null;
