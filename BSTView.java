@@ -28,7 +28,6 @@ public class BSTView extends JPanel {
         scrollPane = new JScrollPane(table);
         this.add(scrollPane);
         setBackground(Color.white);
-
     }
 
     @Override
@@ -36,7 +35,6 @@ public class BSTView extends JPanel {
         super.paintComponent(g);
         if (!tabella) {
             scrollPane.setVisible(false);
-            System.out.println("qui");
             this.root = a.getRadice();
             this.x = this.getWidth() / 2;
             dist = x / 2;
@@ -45,10 +43,8 @@ public class BSTView extends JPanel {
         }
         else
         {
-            //this.BSTTab = BSTTab;
             scrollPane.setVisible(true);
             this.add(scrollPane);
-
         }
     }
 
