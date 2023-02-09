@@ -2,7 +2,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
 class ModelloBSTTab extends AbstractTableModel {
-    private ArrayList<Riga> righe;
+    private final ArrayList<Riga> righe;
 
     ModelloBSTTab(ArrayList<Riga> righe) {
         this.righe = righe;

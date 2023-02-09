@@ -9,8 +9,8 @@ public class BSTView extends JPanel {
     private final int size;
     private int dist;
     private NodoBT root;
-    private BST a;
-    private String modo;
+    private final BST a;
+    private final String modo;
     private Boolean tabella=false;
     ArrayList<Riga> BSTTab;
     JTable table;
