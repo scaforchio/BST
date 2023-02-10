@@ -216,4 +216,6 @@ public class FinestraBT extends JFrame implements ActionListener {
 
     }
 
+
+
 }

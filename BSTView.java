@@ -54,7 +54,8 @@ public class BSTView extends JPanel {
 
         ((Graphics2D) g).setStroke(new BasicStroke(3.0f));
         if (node!=null) {
-            drawNodo(g, x, y, size / 2, node.getInfo().toString());
+           // drawNodo(g, x, y, size / 2, node.getInfo().toString());
+            drawNodo(g, x, y, size / 2, normalizzaDouble(node.getInfo().toString()));
             if (node.getSinistra() != null) {
                 int x1 = x - dist;
                 int y1 = y + size * 2;
@@ -92,5 +93,14 @@ public class BSTView extends JPanel {
       //  if (getHeight()<y+size*2)
       //      setPreferredSize(new Dimension(getWidth()-20,y+size*2));
 
+    }
+    public String normalizzaDouble(String a)
+    {
+        String pulita;
+        if (a.substring(a.length()-2,a.length()).equals(".0"))
+            pulita=a.replace(".0","");
+        else
+            pulita=a;
+        return pulita;
     }
 }
