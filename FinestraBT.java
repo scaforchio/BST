@@ -28,6 +28,7 @@ public class FinestraBT extends JFrame implements ActionListener {
         CP.add(SP,BorderLayout.CENTER);
         JPanel JPConsole=new JPanel();
         JPConsole.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JPConsole.setLayout(new GridBagLayout());
         JLabel JLNodi=new JLabel("Nodes (separated by commas)");
         JTFNodiDaElaborare = new JTextField();
         JTFNodiDaElaborare.setColumns(30);
@@ -65,6 +66,7 @@ public class FinestraBT extends JFrame implements ActionListener {
         JLConsole=new JLabel("<html><br><br><br><br></html>");
         CP.add(JPConsole, BorderLayout.NORTH);
         CP.add(JLConsole,BorderLayout.SOUTH);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
     }
 
@@ -99,8 +101,16 @@ public class FinestraBT extends JFrame implements ActionListener {
             info=info.trim();
             if (!JCBNum.isSelected())
                 albero.inserisciNodo(info);
-            else
-                albero.inserisciNodo(Double.parseDouble(info));
+            else {
+                try{
+                    albero.inserisciNodo(Double.parseDouble(info));
+                }
+                catch(Exception e)
+                {
+                    System.out.println("Valore non numerico!");
+                }
+
+            }
         }
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
@@ -172,7 +182,7 @@ public class FinestraBT extends JFrame implements ActionListener {
 
     public void inOrder()
     {
-        String messaggio="<html><br><b>INORDER: ";
+        String messaggio="<html><br>INORDER: <b>";
         ArrayList <Comparable> lista=albero.attraversamentoSimmetrico();
         for(int i=0;i<lista.size();i++)
         {
@@ -184,7 +194,7 @@ public class FinestraBT extends JFrame implements ActionListener {
 
     public void postOrder()
     {
-        String messaggio="<html><br><b>POSTORDER: ";
+        String messaggio="<html><br>POSTORDER:<b> ";
         ArrayList <Comparable> lista=albero.attraversamentoPosticipato();
         for(int i=0;i<lista.size();i++)
         {
@@ -196,7 +206,7 @@ public class FinestraBT extends JFrame implements ActionListener {
     }
     public void preOrder()
     {
-        String messaggio="<html><br><b>PREORDER: ";
+        String messaggio="<html><br>PREORDER:<b> ";
         ArrayList <Comparable> lista=albero.attraversamentoAnticipato();
         for(int i=0;i<lista.size();i++)
         {
