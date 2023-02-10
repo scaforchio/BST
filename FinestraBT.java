@@ -8,12 +8,12 @@ public class FinestraBT extends JFrame implements ActionListener {
     JTextField JTFNodiDaElaborare;
     JCheckBox JTBTab;
     JCheckBox JCBNum;
-    JLabel JLConsole;
+    JEditorPane JLConsole;
     BSTView v;
     BST albero;
     int pos=0;
     ArrayList<Riga> BSTTab = new ArrayList<Riga>();
-    public FinestraBT(BST albero) {
+    public FinestraBT(BST albero) throws Exception{
         this.albero=albero;
         setSize(new Dimension(1200, 1000));
         NodoBT root=albero.getRadice();
@@ -58,12 +58,18 @@ public class FinestraBT extends JFrame implements ActionListener {
         JPConsole.add(JCBNum);
         JPConsole.add(JBAdd);
         JPConsole.add(JBDel);
+        JPConsole.add(new JLabel("     "));
         JPConsole.add(JBBil);
         JPConsole.add(JTBTab);
         JPConsole.add(JBInorder);
         JPConsole.add(JBPreorder);
         JPConsole.add(JBPostorder);
-        JLConsole=new JLabel("<html><br><br><br><br></html>");
+        //JLConsole=new JLabel("<html><br><br><br><br></html>");
+
+        JLConsole=new JEditorPane();
+        JLConsole.setContentType("text/html");
+        JLConsole.setText("<html><br><br><br><br></html>");
+        JLConsole.setEditable(false);
         CP.add(JPConsole, BorderLayout.NORTH);
         CP.add(JLConsole,BorderLayout.SOUTH);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -80,9 +86,9 @@ public class FinestraBT extends JFrame implements ActionListener {
             case "Del": if (!JTFNodiDaElaborare.getText().trim().equals("")) eliminaNodi(); break;
             case "Balance": bilanciaAlbero(); break;
             case "Table": visualizzaTabella(); break;
-            case "Inorder": inOrder(); break;
-            case "Preorder": preOrder(); break;
-            case "Postorder": postOrder(); break;
+            case "Inorder": attraversamento("IN"); break;
+            case "Preorder": attraversamento("PRE"); break;
+            case "Postorder": attraversamento("POST"); break;
         }
         JTFNodiDaElaborare.setText("");
         if (albero.getRadice()!=null)
@@ -179,41 +185,35 @@ public class FinestraBT extends JFrame implements ActionListener {
             }
         }
     }
+    public void attraversamento(String ordine){
+        ArrayList <Comparable> lista=null;
+        String messaggio="";
+        switch(ordine)
+        {
+            case "IN":messaggio="<html><br>INORDER: <b>";
+                lista=albero.attraversamentoSimmetrico();
+                break;
+            case "PRE":messaggio="<html><br>PREORDER: <b>";
+                lista=albero.attraversamentoAnticipato();
+                break;
+            case "POST":messaggio="<html><br>POSTORDER: <b>";
+                lista=albero.attraversamentoPosticipato();
+                break;
+        }
 
-    public void inOrder()
-    {
-        String messaggio="<html><br>INORDER: <b>";
-        ArrayList <Comparable> lista=albero.attraversamentoSimmetrico();
+
         for(int i=0;i<lista.size();i++)
         {
-            messaggio+="  "+lista.get(i).toString();
+            if (i<lista.size()-1)
+                messaggio+=lista.get(i).toString()+" , ";
+            else
+                messaggio+=lista.get(i).toString()+"";
+
+
         }
         messaggio+="<br><br></b></html>";
         JLConsole.setText(messaggio);
-    }
-
-    public void postOrder()
-    {
-        String messaggio="<html><br>POSTORDER:<b> ";
-        ArrayList <Comparable> lista=albero.attraversamentoPosticipato();
-        for(int i=0;i<lista.size();i++)
-        {
-            messaggio+="  "+lista.get(i).toString();
-        }
-        messaggio+="<br><br></b></html>";
-        JLConsole.setText(messaggio);
-
-    }
-    public void preOrder()
-    {
-        String messaggio="<html><br>PREORDER:<b> ";
-        ArrayList <Comparable> lista=albero.attraversamentoAnticipato();
-        for(int i=0;i<lista.size();i++)
-        {
-            messaggio+="  "+lista.get(i).toString();
-        }
-        messaggio+="<br><br></b></html>";
-        JLConsole.setText(messaggio);
+        JLConsole.setEnabled(true);
 
     }
 
