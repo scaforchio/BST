@@ -103,9 +103,7 @@ public class BST {
 
     public static int numeroNodi(NodoBT r) {
         if (r != null)
-
             return 1 + numeroNodi(r.getSinistra()) + numeroNodi(r.getDestra());
-
         else
             return 0;
     }

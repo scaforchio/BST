@@ -43,7 +43,7 @@ public class FinestraBT extends JFrame implements ActionListener {
 
         JCBNum = new JCheckBox("Numeric order");
 
-        JCBNum.addActionListener(this);
+       // JCBNum.addActionListener(this);
 
 
         JButton JBInorder = new JButton("Inorder");
