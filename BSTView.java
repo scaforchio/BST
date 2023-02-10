@@ -84,10 +84,8 @@ public class BSTView extends JPanel {
         int lungContenuto = contenuto.length();
         if (lungContenuto <= 3) {
             g.drawOval(x - r, y - r, r * 2, r * 2);
-
         } else {
             g.drawOval(x - (lungContenuto * 13) / 2, y - r, (lungContenuto * 13), r * 2);
-
         }
         g.drawString(contenuto, x - (lungContenuto * 13) / 2 + 2, y + 8);
       //  if (getHeight()<y+size*2)
@@ -96,11 +94,10 @@ public class BSTView extends JPanel {
     }
     public String normalizzaDouble(String a)
     {
-        String pulita;
+        String pulita=a;
+        if (a.length()>1)
         if (a.substring(a.length()-2,a.length()).equals(".0"))
             pulita=a.replace(".0","");
-        else
-            pulita=a;
         return pulita;
     }
 }
