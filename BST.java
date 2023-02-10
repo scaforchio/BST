@@ -1,11 +1,5 @@
 import java.util.ArrayList;
 
-/**
- * Aggiungi qui una descrizione della classe BST
- *
- * @author (il tuo nome)
- * @version (un numero di versione o una data)
- */
 public class BST {
     NodoBT Radice;
     ArrayList <Comparable> lista = new ArrayList<Comparable>();
@@ -168,6 +162,12 @@ public class BST {
         return n;
     }
 
+    private NodoBT trovaPredecessore(NodoBT n) {
+        while (n.getDestra() != null) {
+            n = n.getDestra();
+        }
+        return n;
+    }
 
 
     public void bilanciamento() {

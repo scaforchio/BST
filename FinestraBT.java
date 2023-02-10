@@ -4,15 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-/**
- * Aggiungi qui una descrizione della classe FinestraBT
- *
- * @author (il tuo nome)
- * @version (un numero di versione o una data)
- */
 public class FinestraBT extends JFrame implements ActionListener {
     JTextField JTFNodiDaElaborare;
     JCheckBox JTBTab;
+    JCheckBox JCBNum;
     JLabel JLConsole;
     BSTView v;
     BST albero;
@@ -26,7 +21,7 @@ public class FinestraBT extends JFrame implements ActionListener {
             setTitle("Albero con radice " + root.getInfo().toString());
         else
             setTitle("Albero vuoto");
-        v = new BSTView(albero, 600, 40, 50,"tree",BSTTab);
+        v = new BSTView(albero, 600, 40, 50, BSTTab);
         JScrollPane SP = new JScrollPane(v);
         Container CP=getContentPane();
         CP.setLayout(new BorderLayout());
@@ -45,8 +40,12 @@ public class FinestraBT extends JFrame implements ActionListener {
         JTBTab = new JCheckBox("Table");
 
         JTBTab.addActionListener(this);
-      //  JTBTab = new JToggleButton("Table");
-      //  JTBTab.addActionListener(this);
+
+        JCBNum = new JCheckBox("Numeric order");
+
+        JCBNum.addActionListener(this);
+
+
         JButton JBInorder = new JButton("Inorder");
         JBInorder.addActionListener(this);
         JButton JBPreorder = new JButton("Preorder");
@@ -55,6 +54,7 @@ public class FinestraBT extends JFrame implements ActionListener {
         JBPostorder.addActionListener(this);
         JPConsole.add(JLNodi);
         JPConsole.add(JTFNodiDaElaborare);
+        JPConsole.add(JCBNum);
         JPConsole.add(JBAdd);
         JPConsole.add(JBDel);
         JPConsole.add(JBBil);
@@ -71,6 +71,7 @@ public class FinestraBT extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         String comando=actionEvent.getActionCommand();
+
         switch (comando)
         {
             case "Add": if (!JTFNodiDaElaborare.getText().trim().equals("")) aggiungiNodi(); break;
@@ -82,6 +83,10 @@ public class FinestraBT extends JFrame implements ActionListener {
             case "Postorder": postOrder(); break;
         }
         JTFNodiDaElaborare.setText("");
+        if (albero.getRadice()!=null)
+            JCBNum.setEnabled(false);
+        else
+            JCBNum.setEnabled(true);
     }
 
     private void aggiungiNodi()
@@ -92,7 +97,10 @@ public class FinestraBT extends JFrame implements ActionListener {
 
         for (String info:elencoNodi) {
             info=info.trim();
-            albero.inserisciNodo(info);
+            if (!JCBNum.isSelected())
+                albero.inserisciNodo(info);
+            else
+                albero.inserisciNodo(Double.parseDouble(info));
         }
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
@@ -107,7 +115,10 @@ public class FinestraBT extends JFrame implements ActionListener {
 
         for (String info:elencoNodi) {
             info=info.trim();
-            albero.cancellaNodo(info);
+            if (JCBNum.isSelected())
+               albero.cancellaNodo(Double.parseDouble(info));
+            else
+               albero.cancellaNodo(info);
         }
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
