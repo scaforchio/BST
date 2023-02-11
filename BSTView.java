@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class BSTView extends JPanel {
+public class BSTView extends JPanel implements MouseListener {
     private final int y;
     private final int size;
     private int dist;
@@ -10,6 +12,7 @@ public class BSTView extends JPanel {
     private final BST a;
     private Boolean tabella=false;
     ArrayList<Riga> BSTTab;
+    ArrayList<NodoGrafico> ElencoNodi=new ArrayList<NodoGrafico>();
     JTable table;
     JScrollPane scrollPane;
     public BSTView(BST a, int x, int y, int size, ArrayList<Riga> BSTTab) {
@@ -23,6 +26,7 @@ public class BSTView extends JPanel {
         table = new JTable(new ModelloBSTTab(BSTTab));
         scrollPane = new JScrollPane(table);
         this.add(scrollPane);
+        addMouseListener(this);
         setBackground(Color.white);
     }
 
@@ -35,6 +39,7 @@ public class BSTView extends JPanel {
             int x = this.getWidth() / 2;
             dist = x / 2;
             g.setFont(new Font("Courier", Font.BOLD, 20));
+            ElencoNodi.clear();
             drawTree(g, root, x, y, size, dist);
         }
         else
@@ -75,19 +80,19 @@ public class BSTView extends JPanel {
                 drawTree(g, node.getDestra(), x + dist, y + size * 2, size, dist / 2);
             }
         }
-     //   if (getHeight()<y+size*2)
-     //   setPreferredSize(new Dimension(getWidth()-20,y+size*2));
-
     }
 
-    private void drawNodo(Graphics g, int x, int y, int r, String contenuto) {
+    private void drawNodo(Graphics g, int x, int y, int r, String contenuto, ) {
         int lungContenuto = contenuto.length();
+        int larghezza = r;
         if (lungContenuto <= 3) {
             g.drawOval(x - r, y - r, r * 2, r * 2);
         } else {
             g.drawOval(x - (lungContenuto * 13) / 2, y - r, (lungContenuto * 13), r * 2);
         }
         g.drawString(contenuto, x - (lungContenuto * 13) / 2 + 2, y + 8);
+
+        ElencoNodi.add(new NodoGrafico(x-r,y-r,lungContenuto*13,r*2,Color.white,contenuto));
       //  if (getHeight()<y+size*2)
       //      setPreferredSize(new Dimension(getWidth()-20,y+size*2));
 
@@ -99,5 +104,37 @@ public class BSTView extends JPanel {
         if (a.substring(a.length()-2,a.length()).equals(".0"))
             pulita=a.replace(".0","");
         return pulita;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent mouseEvent) {
+        int coordX= mouseEvent.getX();
+        int coordY= mouseEvent.getY();
+        for (NodoGrafico n:ElencoNodi) {
+            if (coordX>n.getX() & coordY>n.getY() & coordX-n.getX()<n.getLarghezza() & coordY-n.getY()<n.getAltezza())
+                System.out.println("Nodo "+n.getContenuto());
+
+        }
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) {
+
     }
 }
