@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 public class FinestraBT extends JFrame implements ActionListener {
     JTextField JTFNodiDaElaborare;
     JCheckBox JTBTab;
@@ -40,14 +39,8 @@ public class FinestraBT extends JFrame implements ActionListener {
         JButton JBBil = new JButton("Balance");
         JBBil.addActionListener(this);
         JTBTab = new JCheckBox("Table");
-
         JTBTab.addActionListener(this);
-
         JCBNum = new JCheckBox("Numeric order");
-
-        // JCBNum.addActionListener(this);
-
-
         JButton JBInorder = new JButton("Inorder");
         JBInorder.addActionListener(this);
         JButton JBPreorder = new JButton("Preorder");
@@ -55,17 +48,18 @@ public class FinestraBT extends JFrame implements ActionListener {
         JButton JBPostorder = new JButton("Postorder");
         JBPostorder.addActionListener(this);
         JPComandi.add(JLNodi);
-        JPComandi.add(JTFNodiDaElaborare);
         JPComandi.add(JCBNum);
+        JPComandi.add(JTFNodiDaElaborare);
         JPComandi.add(JBAdd);
         JPComandi.add(JBDel);
-        JPComandi.add(new JLabel("     "));
+        JPComandi.add(new JLabel("                 "));
         JPComandi.add(JBBil);
         JPComandi.add(JTBTab);
         JPComandi.add(JBInorder);
         JPComandi.add(JBPreorder);
         JPComandi.add(JBPostorder);
-        //JLConsole=new JLabel("<html><br><br><br><br></html>");
+        getRootPane().setDefaultButton(JBAdd);
+
 
         JEPConsole = new JEditorPane();
         JEPConsole.setContentType("text/html");
@@ -109,6 +103,7 @@ public class FinestraBT extends JFrame implements ActionListener {
             JCBNum.setEnabled(false);
         else
             JCBNum.setEnabled(true);
+        JTFNodiDaElaborare.requestFocus();
     }
 
     private void aggiungiNodi() {
@@ -132,7 +127,6 @@ public class FinestraBT extends JFrame implements ActionListener {
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
         svuotaConsole();
-
     }
 
     private void eliminaNodi() {
@@ -150,7 +144,6 @@ public class FinestraBT extends JFrame implements ActionListener {
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
         svuotaConsole();
-
     }
 
     private void bilanciaAlbero() {
@@ -158,14 +151,12 @@ public class FinestraBT extends JFrame implements ActionListener {
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
         svuotaConsole();
-
     }
 
     private void visualizzaTabella() {
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
         svuotaConsole();
-
     }
 
     public void tabella(BST t) {
@@ -174,7 +165,6 @@ public class FinestraBT extends JFrame implements ActionListener {
         NodoBT r = t.getRadice();
         if (r != null)
             tabella(r);
-
     }
 
     private void tabella(NodoBT r) {
@@ -220,8 +210,6 @@ public class FinestraBT extends JFrame implements ActionListener {
                 messaggio += lista.get(i).toString() + " , ";
             else
                 messaggio += lista.get(i).toString() + "";
-
-
         }
         messaggio += "<br><br></b></html>";
         JEPConsole.setText(messaggio);

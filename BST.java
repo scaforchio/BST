@@ -177,7 +177,6 @@ public class BST {
         bilanciamento(A2, middle + 1, lista.size() - 1);
         Radice = A2.getRadice();
         A2.setRadice(null);
-
     }
 
     private void bilanciamento(BST A2, int a, int b) {
