@@ -171,10 +171,10 @@ public class BST {
     public void bilanciamento() {
         BST A2 = new BST();
         this.attraversamentoSimmetrico();
-        int metà = (lista.size()) / 2;
-        A2.inserisciNodo(lista.get(metà));
-        bilanciamento(A2, 0, metà - 1);
-        bilanciamento(A2, metà + 1, lista.size() - 1);
+        int middle = (lista.size()) / 2;
+        A2.inserisciNodo(lista.get(middle));
+        bilanciamento(A2, 0, middle - 1);
+        bilanciamento(A2, middle + 1, lista.size() - 1);
         Radice = A2.getRadice();
         A2.setRadice(null);
 
@@ -184,10 +184,10 @@ public class BST {
         if (a == b)
             A2.inserisciNodo(lista.get(a));
         if (a < b) {
-            int metà = a + ((b - a) / 2);
-            A2.inserisciNodo(lista.get(metà));
-            bilanciamento(A2, a, metà - 1);
-            bilanciamento(A2, metà + 1, b);
+            int middle = a + ((b - a) / 2);
+            A2.inserisciNodo(lista.get(middle));
+            bilanciamento(A2, a, middle - 1);
+            bilanciamento(A2, middle + 1, b);
         }
     }
 }
