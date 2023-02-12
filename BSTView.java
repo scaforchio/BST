@@ -10,22 +10,26 @@ public class BSTView extends JPanel implements MouseListener {
     private int dist;
     private NodoBT root;
     private final BST a;
-    private Boolean tabella=false;
+    private Boolean tabella = false;
     ArrayList<Riga> BSTTab;
-    ArrayList<NodoGrafico> ElencoNodi=new ArrayList<NodoGrafico>();
+    ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
+    ArrayList<Arco> ElencoArchi = new ArrayList<Arco>();
+
     JTable table;
     JScrollPane scrollPane;
+
     public BSTView(BST a, int x, int y, int size, ArrayList<Riga> BSTTab) {
-        this.a=a;
+        this.a = a;
         this.root = a.getRadice();
         //  this.x = x;
         this.y = y;
         this.size = size;
         this.dist = x / 2;
-        this.BSTTab=BSTTab;
+        this.BSTTab = BSTTab;
         table = new JTable(new ModelloBSTTab(BSTTab));
         scrollPane = new JScrollPane(table);
         this.add(scrollPane);
+        creaAlberoGrafico(root, x, y, size, dist);
         addMouseListener(this);
         setBackground(Color.white);
     }
@@ -40,101 +44,115 @@ public class BSTView extends JPanel implements MouseListener {
             dist = x / 2;
             g.setFont(new Font("Courier", Font.BOLD, 20));
             ElencoNodi.clear();
-            drawTree(g, root, x, y, size, dist);
-        }
-        else
-        {
+            ElencoArchi.clear();
+            creaAlberoGrafico(root, x, y, size, dist);
+            disegnaNodi(g);
+            disegnaArchi(g);
+        } else {
             scrollPane.setVisible(true);
             this.add(scrollPane);
         }
     }
 
-    public void ridisegna(boolean tabella)
-    {
-        this.tabella=tabella;
+    public void ridisegna(boolean tabella) {
+        this.tabella = tabella;
         repaint();
     }
 
-    private void drawTree(Graphics g, NodoBT node, int x, int y, int size, int dist) {
-
-        ((Graphics2D) g).setStroke(new BasicStroke(3.0f));
-        if (node!=null) {
-           // drawNodo(g, x, y, size / 2, node.getInfo().toString());
-            drawNodo(g, x, y, size / 2, normalizzaDouble(node.getInfo().toString()));
+    private void creaAlberoGrafico(NodoBT node, int x, int y, int size, int dist) {
+        if (node != null) {
+            creaNodo(x, y, size / 2, normalizzaDouble(node.getInfo().toString()), Color.white);
             if (node.getSinistra() != null) {
                 int x1 = x - dist;
                 int y1 = y + size * 2;
-                g.drawLine(x, y + size / 2, x1, y1 - size / 2);
-                drawTree(g, node.getSinistra(), x1, y1, size, dist / 2);
+                ElencoArchi.add(new Arco(x,x1,y+size/2,y1-size/2,Color.black,""));
+                creaAlberoGrafico(node.getSinistra(), x1, y1, size, dist / 2);
             }
             if (node.getDestra() != null) {
                 int x2 = x + dist;
                 int y2 = y + size * 2;
-                g.drawLine(x, y + size / 2, x2, y2 - size / 2);
-                drawTree(g, node.getDestra(), x2, y2, size, dist / 2);
+                ElencoArchi.add(new Arco(x,x2,y+size/2,y2-size/2,Color.black,""));
+                creaAlberoGrafico(node.getDestra(), x2, y2, size, dist / 2);
             }
-            if (node.getSinistra() != null) {
-                drawTree(g, node.getSinistra(), x - dist, y + size * 2, size, dist / 2);
-            }
-            if (node.getDestra() != null) {
-                drawTree(g, node.getDestra(), x + dist, y + size * 2, size, dist / 2);
-            }
+
         }
     }
 
-    private void drawNodo(Graphics g, int x, int y, int r, String contenuto, ) {
+    private void creaNodo(int x, int y, int r, String contenuto, Color colore) {
         int lungContenuto = contenuto.length();
         int larghezza = r;
         if (lungContenuto <= 3) {
-            g.drawOval(x - r, y - r, r * 2, r * 2);
-        } else {
-            g.drawOval(x - (lungContenuto * 13) / 2, y - r, (lungContenuto * 13), r * 2);
-        }
-        g.drawString(contenuto, x - (lungContenuto * 13) / 2 + 2, y + 8);
+            larghezza=r*2;
 
-        ElencoNodi.add(new NodoGrafico(x-r,y-r,lungContenuto*13,r*2,Color.white,contenuto));
-      //  if (getHeight()<y+size*2)
-      //      setPreferredSize(new Dimension(getWidth()-20,y+size*2));
+        } else {
+            larghezza=lungContenuto*13;
+
+        }
+
+        ElencoNodi.add(new NodoGrafico(x, y, larghezza, r * 2, Color.white, contenuto));
 
     }
-    public String normalizzaDouble(String a)
-    {
-        String pulita=a;
-        if (a.length()>1)
-        if (a.substring(a.length()-2,a.length()).equals(".0"))
-            pulita=a.replace(".0","");
+
+    public void disegnaNodi(Graphics g) {
+        ((Graphics2D) g).setStroke(new BasicStroke(3.0f));
+        for (NodoGrafico n : ElencoNodi) {
+
+            int lungContenuto = n.getContenuto().length();
+            g.setColor(n.getColore());
+            g.fillOval(n.getX()-n.getLarghezza()/2, n.getY()-n.getAltezza()/2, n.getLarghezza(), n.getAltezza());
+
+            g.setColor(Color.black);
+
+            g.drawOval(n.getX()-n.getLarghezza()/2, n.getY()-n.getAltezza()/2, n.getLarghezza(), n.getAltezza());
+
+            g.drawString(n.getContenuto(), n.getX() - (lungContenuto * 13) / 2 + 2, n.getY() + 8);
+        }
+
+
+
+    }
+    public void disegnaArchi(Graphics g) {
+        ((Graphics2D) g).setStroke(new BasicStroke(3.0f));
+        for (Arco a : ElencoArchi) {
+            g.setColor(a.getColore());
+            g.drawLine(a.getxStart(),a.getyStart(),a.getxEnd(),a.getyEnd());
+            g.drawString(a.getLabel(), (a.getxStart()+a.getxEnd())/2+10,(a.getyStart()+a.getyEnd())/2);
+        }
+
+
+
+    }
+
+    public String normalizzaDouble(String a) {
+        String pulita = a;
+        if (a.length() > 1)
+            if (a.substring(a.length() - 2, a.length()).equals(".0"))
+                pulita = a.replace(".0", "");
         return pulita;
     }
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-        int coordX= mouseEvent.getX();
-        int coordY= mouseEvent.getY();
-        for (NodoGrafico n:ElencoNodi) {
-            if (coordX>n.getX() & coordY>n.getY() & coordX-n.getX()<n.getLarghezza() & coordY-n.getY()<n.getAltezza())
-                System.out.println("Nodo "+n.getContenuto());
+        int coordX = mouseEvent.getX();
+        int coordY = mouseEvent.getY();
 
+        for (NodoGrafico n : ElencoNodi) {
+            if ((coordX > n.getX()-n.getLarghezza()/2) & (coordY > n.getY()-n.getAltezza()/2) & (coordX < n.getX()+n.getLarghezza()/2) & (coordY < n.getY()+n.getAltezza()/2    )){
+                n.setColore(Color.green);
+                System.out.println("Nodo " + n.getContenuto());
+            }
         }
-
     }
 
     @Override
-    public void mousePressed(MouseEvent mouseEvent) {
-
-    }
+    public void mousePressed(MouseEvent mouseEvent) {}
 
     @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
-
-    }
+    public void mouseReleased(MouseEvent mouseEvent) {}
 
     @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-
-    }
+    public void mouseEntered(MouseEvent mouseEvent) {}
 
     @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-
-    }
+    public void mouseExited(MouseEvent mouseEvent) {}
 }
