@@ -1,9 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
-public class FinestraBT extends JFrame implements ActionListener {
+public class FinestraBT extends JFrame implements ActionListener, ComponentListener {
     JTextField JTFNodiDaElaborare;
     JCheckBox JTBTab;
     JCheckBox JCBNum;
@@ -11,16 +10,16 @@ public class FinestraBT extends JFrame implements ActionListener {
     BSTView v;
     BST albero;
     int pos = 0;
-    int dist=600;
+    int dist;
     ArrayList<Riga> BSTTab = new ArrayList<Riga>();
     ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
     ArrayList<Arco> ElencoArchi = new ArrayList<Arco>();
 
     public FinestraBT(BST albero) throws Exception {
         this.albero = albero;
-        //setSize(new Dimension(1200, 1000));
+        setSize(new Dimension(1200, 1000));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-
+        addComponentListener(this);
         NodoBT root = albero.getRadice();
         if (root != null)
             setTitle("Albero con radice " + root.getInfo().toString());
@@ -87,10 +86,16 @@ public class FinestraBT extends JFrame implements ActionListener {
 
         switch (comando) {
             case "Add":
-                if (!JTFNodiDaElaborare.getText().trim().equals("")) {aggiungiNodi();creaAlberoGrafico(albero.getRadice(),dist,40,50,dist/2);}
+                if (!JTFNodiDaElaborare.getText().trim().equals("")) {
+                    aggiungiNodi();
+                    creaAlberoGrafico(albero.getRadice(),dist,40,50,dist/2);
+                }
                 break;
             case "Del":
-                if (!JTFNodiDaElaborare.getText().trim().equals("")) {eliminaNodi();creaAlberoGrafico(albero.getRadice(),dist,40,50,dist/2);}
+                if (!JTFNodiDaElaborare.getText().trim().equals("")) {
+                    eliminaNodi();
+                    creaAlberoGrafico(albero.getRadice(),dist,40,50,dist/2);
+                }
                 break;
             case "Balance":
                 bilanciaAlbero();
@@ -278,4 +283,28 @@ public class FinestraBT extends JFrame implements ActionListener {
         return pulita;
     }
 
+    @Override
+    public void componentResized(ComponentEvent componentEvent) {
+        ElencoArchi.clear();
+        ElencoNodi.clear();
+        NodoBT rad=albero.getRadice();
+        int dimx=this.getWidth()/2;
+        creaAlberoGrafico(rad, dimx, 40, 50, dimx/2);
+        v.ridisegna(false);
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent componentEvent) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent componentEvent) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent componentEvent) {
+
+    }
 }
