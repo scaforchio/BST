@@ -151,6 +151,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 albero.cancellaNodo(Double.parseDouble(info));
             else
                 albero.cancellaNodo(info);
+            eliminaNodoGrafico(info);
         }
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
@@ -235,6 +236,19 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JEPConsole.setText(messaggio);
     }
 
+    private void eliminaNodoGrafico(String info)
+    {
+        for(int i=0;i<ElencoNodi.size();i++)
+        {
+            if (info.equals(ElencoNodi.get(i).getContenuto()))
+            {
+                ElencoNodi.remove(i);
+                ElencoArchi.clear();
+                break;
+            }
+        }
+
+    }
     private void creaAlberoGrafico(NodoBT node, int x, int y, int size, int dist) {
 
         if (node != null) {
