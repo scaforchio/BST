@@ -11,14 +11,16 @@ public class BSTView extends JPanel implements MouseListener {
     private NodoBT root;
     private final BST a;
     private Boolean tabella = false;
+    private Graphics g;
     ArrayList<Riga> BSTTab;
-    ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
-    ArrayList<Arco> ElencoArchi = new ArrayList<Arco>();
+//
+    ArrayList<NodoGrafico> ElencoNodi;
+    ArrayList<Arco> ElencoArchi;
 
     JTable table;
     JScrollPane scrollPane;
 
-    public BSTView(BST a, int x, int y, int size, ArrayList<Riga> BSTTab) {
+    public BSTView(BST a, int x, int y, int size, ArrayList<Riga> BSTTab,ArrayList<NodoGrafico> ng,ArrayList<Arco> ar) {
         this.a = a;
         this.root = a.getRadice();
         //  this.x = x;
@@ -26,10 +28,12 @@ public class BSTView extends JPanel implements MouseListener {
         this.size = size;
         this.dist = x / 2;
         this.BSTTab = BSTTab;
+        this.ElencoArchi=ar;
+        this.ElencoNodi=ng;
         table = new JTable(new ModelloBSTTab(BSTTab));
         scrollPane = new JScrollPane(table);
         this.add(scrollPane);
-        creaAlberoGrafico(root, x, y, size, dist);
+      //  creaAlberoGrafico(root, x, y, size, dist);
         addMouseListener(this);
         setBackground(Color.white);
     }
@@ -37,17 +41,18 @@ public class BSTView extends JPanel implements MouseListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        this.g=g;
         if (!tabella) {
             scrollPane.setVisible(false);
             this.root = a.getRadice();
             int x = this.getWidth() / 2;
             dist = x / 2;
             g.setFont(new Font("Courier", Font.BOLD, 20));
-            ElencoNodi.clear();
-            ElencoArchi.clear();
-            creaAlberoGrafico(root, x, y, size, dist);
-            disegnaNodi(g);
-            disegnaArchi(g);
+  //          ElencoNodi.clear();
+  //          ElencoArchi.clear();
+  //          creaAlberoGrafico(root, x, y, size, dist);
+            disegnaNodi();
+            disegnaArchi();
         } else {
             scrollPane.setVisible(true);
             this.add(scrollPane);
@@ -58,7 +63,7 @@ public class BSTView extends JPanel implements MouseListener {
         this.tabella = tabella;
         repaint();
     }
-
+/*
     private void creaAlberoGrafico(NodoBT node, int x, int y, int size, int dist) {
         if (node != null) {
             creaNodo(x, y, size / 2, normalizzaDouble(node.getInfo().toString()), Color.white);
@@ -92,15 +97,16 @@ public class BSTView extends JPanel implements MouseListener {
         ElencoNodi.add(new NodoGrafico(x, y, larghezza, r * 2, Color.white, contenuto));
 
     }
-
-    public void disegnaNodi(Graphics g) {
+*/
+    public void disegnaNodi() {
         ((Graphics2D) g).setStroke(new BasicStroke(3.0f));
         for (NodoGrafico n : ElencoNodi) {
 
             int lungContenuto = n.getContenuto().length();
-            g.setColor(n.getColore());
-            g.fillOval(n.getX()-n.getLarghezza()/2, n.getY()-n.getAltezza()/2, n.getLarghezza(), n.getAltezza());
-
+            if (n.getColore()!=Color.white) {
+                g.setColor(n.getColore());
+                g.fillOval(n.getX() - n.getLarghezza() / 2, n.getY() - n.getAltezza() / 2, n.getLarghezza(), n.getAltezza());
+            }
             g.setColor(Color.black);
 
             g.drawOval(n.getX()-n.getLarghezza()/2, n.getY()-n.getAltezza()/2, n.getLarghezza(), n.getAltezza());
@@ -111,7 +117,7 @@ public class BSTView extends JPanel implements MouseListener {
 
 
     }
-    public void disegnaArchi(Graphics g) {
+    public void disegnaArchi() {
         ((Graphics2D) g).setStroke(new BasicStroke(3.0f));
         for (Arco a : ElencoArchi) {
             g.setColor(a.getColore());
@@ -139,6 +145,7 @@ public class BSTView extends JPanel implements MouseListener {
         for (NodoGrafico n : ElencoNodi) {
             if ((coordX > n.getX()-n.getLarghezza()/2) & (coordY > n.getY()-n.getAltezza()/2) & (coordX < n.getX()+n.getLarghezza()/2) & (coordY < n.getY()+n.getAltezza()/2    )){
                 n.setColore(Color.green);
+                disegnaNodi();
                 System.out.println("Nodo " + n.getContenuto());
             }
         }

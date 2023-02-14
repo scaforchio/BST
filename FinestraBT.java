@@ -11,17 +11,22 @@ public class FinestraBT extends JFrame implements ActionListener {
     BSTView v;
     BST albero;
     int pos = 0;
+    int dist=600;
     ArrayList<Riga> BSTTab = new ArrayList<Riga>();
+    ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
+    ArrayList<Arco> ElencoArchi = new ArrayList<Arco>();
 
     public FinestraBT(BST albero) throws Exception {
         this.albero = albero;
-        setSize(new Dimension(1200, 1000));
+        //setSize(new Dimension(1200, 1000));
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         NodoBT root = albero.getRadice();
         if (root != null)
             setTitle("Albero con radice " + root.getInfo().toString());
         else
             setTitle("Albero vuoto");
-        v = new BSTView(albero, 600, 40, 50, BSTTab);
+        v = new BSTView(albero, 600, 40, 50, BSTTab,ElencoNodi,ElencoArchi);
         JScrollPane SP = new JScrollPane(v);
         Container CP = getContentPane();
         CP.setLayout(new BorderLayout());
@@ -67,8 +72,13 @@ public class FinestraBT extends JFrame implements ActionListener {
         JEPConsole.setEditable(false);
         CP.add(JPComandi, BorderLayout.NORTH);
         CP.add(JEPConsole, BorderLayout.SOUTH);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         setVisible(true);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        dist = (int) screenSize.getWidth()/2;
+
+
+        System.out.println("Dist "+dist);
     }
 
     @Override
@@ -77,10 +87,10 @@ public class FinestraBT extends JFrame implements ActionListener {
 
         switch (comando) {
             case "Add":
-                if (!JTFNodiDaElaborare.getText().trim().equals("")) aggiungiNodi();
+                if (!JTFNodiDaElaborare.getText().trim().equals("")) {aggiungiNodi();creaAlberoGrafico(albero.getRadice(),dist,40,50,dist/2);}
                 break;
             case "Del":
-                if (!JTFNodiDaElaborare.getText().trim().equals("")) eliminaNodi();
+                if (!JTFNodiDaElaborare.getText().trim().equals("")) {eliminaNodi();creaAlberoGrafico(albero.getRadice(),dist,40,50,dist/2);}
                 break;
             case "Balance":
                 bilanciaAlbero();
@@ -209,7 +219,9 @@ public class FinestraBT extends JFrame implements ActionListener {
             if (i < lista.size() - 1)
                 messaggio += lista.get(i).toString() + " , ";
             else
-                messaggio += lista.get(i).toString() + "";
+                messaggio += lista.get(i).toString() + "";ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
+//    ArrayList<Arco> ElencoArchi = new ArrayList<Arco>();
+
         }
         messaggio += "<br><br></b></html>";
         JEPConsole.setText(messaggio);
@@ -221,4 +233,49 @@ public class FinestraBT extends JFrame implements ActionListener {
         messaggio += "<br><br></b></html>";
         JEPConsole.setText(messaggio);
     }
+
+    private void creaAlberoGrafico(NodoBT node, int x, int y, int size, int dist) {
+        System.out.println("X: "+x);
+        System.out.println("X: "+y);
+        if (node != null) {
+            creaNodo(x, y, size / 2, normalizzaDouble(node.getInfo().toString()), Color.white);
+            if (node.getSinistra() != null) {
+                int x1 = x - dist;
+                int y1 = y + size * 2;
+                ElencoArchi.add(new Arco(x,x1,y+size/2,y1-size/2,Color.black,""));
+                creaAlberoGrafico(node.getSinistra(), x1, y1, size, dist / 2);
+            }
+            if (node.getDestra() != null) {
+                int x2 = x + dist;
+                int y2 = y + size * 2;
+                ElencoArchi.add(new Arco(x,x2,y+size/2,y2-size/2,Color.black,""));
+                creaAlberoGrafico(node.getDestra(), x2, y2, size, dist / 2);
+            }
+
+        }
+    }
+
+    private void creaNodo(int x, int y, int r, String contenuto, Color colore) {
+        int lungContenuto = contenuto.length();
+        int larghezza = r;
+        if (lungContenuto <= 3) {
+            larghezza=r*2;
+
+        } else {
+            larghezza=lungContenuto*13;
+
+        }
+
+        ElencoNodi.add(new NodoGrafico(x, y, larghezza, r * 2, Color.white, contenuto));
+
+    }
+
+    public String normalizzaDouble(String a) {
+        String pulita = a;
+        if (a.length() > 1)
+            if (a.substring(a.length() - 2, a.length()).equals(".0"))
+                pulita = a.replace(".0", "");
+        return pulita;
+    }
+
 }
