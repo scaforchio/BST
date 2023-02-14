@@ -64,7 +64,6 @@ public class BSTView extends JPanel implements MouseListener {
     public void disegnaNodi() {
         ((Graphics2D) g).setStroke(new BasicStroke(3.0f));
         for (NodoGrafico n : ElencoNodi) {
-            System.out.println("Nodo "+n.getContenuto()+" "+n.getColore().toString());
             int lungContenuto = n.getContenuto().length();
             if (n.getColore()!=Color.white) {
                 g.setColor(n.getColore());
@@ -98,7 +97,7 @@ public class BSTView extends JPanel implements MouseListener {
                 n.setColore(Color.green);
                // disegnaNodi();
                 repaint();
-                System.out.println("Nodo " + n.getContenuto());
+
             }
         }
     }

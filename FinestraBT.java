@@ -238,7 +238,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     private void creaAlberoGrafico(NodoBT node, int x, int y, int size, int dist) {
 
         if (node != null) {
-            NodoGrafico n= cercaNodoGrafico(node.getInfo().toString());
+            NodoGrafico n= cercaNodoGrafico(normalizzaDouble(node.getInfo().toString()));
             if (n==null)
                 creaNodo(x, y, size / 2, normalizzaDouble(node.getInfo().toString()), Color.white);
             else {
