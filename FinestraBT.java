@@ -63,8 +63,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JPComandi.add(JBPreorder);
         JPComandi.add(JBPostorder);
         getRootPane().setDefaultButton(JBAdd);
-
-
         JEPConsole = new JEditorPane();
         JEPConsole.setContentType("text/html");
         JEPConsole.setText("<html><br><br><br><br></html>");
@@ -76,8 +74,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         dist = (int) screenSize.getWidth()/2;
 
-
-        System.out.println("Dist "+dist);
     }
 
     @Override
@@ -240,10 +236,16 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     }
 
     private void creaAlberoGrafico(NodoBT node, int x, int y, int size, int dist) {
-        System.out.println("X: "+x);
-        System.out.println("X: "+y);
+
         if (node != null) {
-            creaNodo(x, y, size / 2, normalizzaDouble(node.getInfo().toString()), Color.white);
+            NodoGrafico n= cercaNodoGrafico(node.getInfo().toString());
+            if (n==null)
+                creaNodo(x, y, size / 2, normalizzaDouble(node.getInfo().toString()), Color.white);
+            else {
+                n.setX(x);
+                n.setY(y);
+            }
+
             if (node.getSinistra() != null) {
                 int x1 = x - dist;
                 int y1 = y + size * 2;
@@ -260,6 +262,16 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
     }
 
+    private NodoGrafico cercaNodoGrafico(String a)
+    {
+
+        for (NodoGrafico n : ElencoNodi)
+        {
+            if (n.getContenuto().equals(a))
+                return n;
+        }
+        return null;
+    }
     private void creaNodo(int x, int y, int r, String contenuto, Color colore) {
         int lungContenuto = contenuto.length();
         int larghezza = r;
@@ -285,8 +297,8 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
     @Override
     public void componentResized(ComponentEvent componentEvent) {
-        ElencoArchi.clear();
-        ElencoNodi.clear();
+           ElencoArchi.clear();
+      //  ElencoNodi.clear();
         NodoBT rad=albero.getRadice();
         int dimx=this.getWidth()/2;
         creaAlberoGrafico(rad, dimx, 40, 50, dimx/2);

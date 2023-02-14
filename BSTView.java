@@ -33,7 +33,6 @@ public class BSTView extends JPanel implements MouseListener {
         table = new JTable(new ModelloBSTTab(BSTTab));
         scrollPane = new JScrollPane(table);
         this.add(scrollPane);
-      //  creaAlberoGrafico(root, x, y, size, dist);
         addMouseListener(this);
         setBackground(Color.white);
     }
@@ -48,9 +47,7 @@ public class BSTView extends JPanel implements MouseListener {
             int x = this.getWidth() / 2;
             dist = x / 2;
             g.setFont(new Font("Courier", Font.BOLD, 20));
-  //          ElencoNodi.clear();
-  //          ElencoArchi.clear();
-  //          creaAlberoGrafico(root, x, y, size, dist);
+
             disegnaNodi();
             disegnaArchi();
         } else {
@@ -63,45 +60,11 @@ public class BSTView extends JPanel implements MouseListener {
         this.tabella = tabella;
         repaint();
     }
-/*
-    private void creaAlberoGrafico(NodoBT node, int x, int y, int size, int dist) {
-        if (node != null) {
-            creaNodo(x, y, size / 2, normalizzaDouble(node.getInfo().toString()), Color.white);
-            if (node.getSinistra() != null) {
-                int x1 = x - dist;
-                int y1 = y + size * 2;
-                ElencoArchi.add(new Arco(x,x1,y+size/2,y1-size/2,Color.black,""));
-                creaAlberoGrafico(node.getSinistra(), x1, y1, size, dist / 2);
-            }
-            if (node.getDestra() != null) {
-                int x2 = x + dist;
-                int y2 = y + size * 2;
-                ElencoArchi.add(new Arco(x,x2,y+size/2,y2-size/2,Color.black,""));
-                creaAlberoGrafico(node.getDestra(), x2, y2, size, dist / 2);
-            }
 
-        }
-    }
-
-    private void creaNodo(int x, int y, int r, String contenuto, Color colore) {
-        int lungContenuto = contenuto.length();
-        int larghezza = r;
-        if (lungContenuto <= 3) {
-            larghezza=r*2;
-
-        } else {
-            larghezza=lungContenuto*13;
-
-        }
-
-        ElencoNodi.add(new NodoGrafico(x, y, larghezza, r * 2, Color.white, contenuto));
-
-    }
-*/
     public void disegnaNodi() {
         ((Graphics2D) g).setStroke(new BasicStroke(3.0f));
         for (NodoGrafico n : ElencoNodi) {
-
+            System.out.println("Nodo "+n.getContenuto()+" "+n.getColore().toString());
             int lungContenuto = n.getContenuto().length();
             if (n.getColore()!=Color.white) {
                 g.setColor(n.getColore());
@@ -114,8 +77,6 @@ public class BSTView extends JPanel implements MouseListener {
             g.drawString(n.getContenuto(), n.getX() - (lungContenuto * 13) / 2 + 2, n.getY() + 8);
         }
 
-
-
     }
     public void disegnaArchi() {
         ((Graphics2D) g).setStroke(new BasicStroke(3.0f));
@@ -124,18 +85,8 @@ public class BSTView extends JPanel implements MouseListener {
             g.drawLine(a.getxStart(),a.getyStart(),a.getxEnd(),a.getyEnd());
             g.drawString(a.getLabel(), (a.getxStart()+a.getxEnd())/2+10,(a.getyStart()+a.getyEnd())/2);
         }
-
-
-
     }
 
-    public String normalizzaDouble(String a) {
-        String pulita = a;
-        if (a.length() > 1)
-            if (a.substring(a.length() - 2, a.length()).equals(".0"))
-                pulita = a.replace(".0", "");
-        return pulita;
-    }
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
@@ -145,7 +96,8 @@ public class BSTView extends JPanel implements MouseListener {
         for (NodoGrafico n : ElencoNodi) {
             if ((coordX > n.getX()-n.getLarghezza()/2) & (coordY > n.getY()-n.getAltezza()/2) & (coordX < n.getX()+n.getLarghezza()/2) & (coordY < n.getY()+n.getAltezza()/2    )){
                 n.setColore(Color.green);
-                disegnaNodi();
+               // disegnaNodi();
+                repaint();
                 System.out.println("Nodo " + n.getContenuto());
             }
         }
