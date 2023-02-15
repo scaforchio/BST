@@ -11,6 +11,8 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     BST albero;
     int pos = 0;
     int dist;
+    public static ArrayList<String> listaSelezionati=new ArrayList<String>();
+
     ArrayList<Riga> BSTTab = new ArrayList<Riga>();
     ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
     ArrayList<Arco> ElencoArchi = new ArrayList<Arco>();
@@ -222,7 +224,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 messaggio += lista.get(i).toString() + " , ";
             else
                 messaggio += lista.get(i).toString() + "";ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
-//    ArrayList<Arco> ElencoArchi = new ArrayList<Arco>();
 
         }
         messaggio += "<br><br></b></html>";
@@ -296,9 +297,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
             larghezza=lungContenuto*13;
 
         }
-
         ElencoNodi.add(new NodoGrafico(x, y, larghezza, r * 2, Color.white, contenuto));
-
     }
 
     public String normalizzaDouble(String a) {

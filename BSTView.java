@@ -47,7 +47,6 @@ public class BSTView extends JPanel implements MouseListener {
             int x = this.getWidth() / 2;
             dist = x / 2;
             g.setFont(new Font("Courier", Font.BOLD, 20));
-
             disegnaNodi();
             disegnaArchi();
         } else {
@@ -70,9 +69,7 @@ public class BSTView extends JPanel implements MouseListener {
                 g.fillOval(n.getX() - n.getLarghezza() / 2, n.getY() - n.getAltezza() / 2, n.getLarghezza(), n.getAltezza());
             }
             g.setColor(Color.black);
-
             g.drawOval(n.getX()-n.getLarghezza()/2, n.getY()-n.getAltezza()/2, n.getLarghezza(), n.getAltezza());
-
             g.drawString(n.getContenuto(), n.getX() - (lungContenuto * 13) / 2 + 2, n.getY() + 8);
         }
 
@@ -86,20 +83,25 @@ public class BSTView extends JPanel implements MouseListener {
         }
     }
 
-
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         int coordX = mouseEvent.getX();
         int coordY = mouseEvent.getY();
-
         for (NodoGrafico n : ElencoNodi) {
             if ((coordX > n.getX()-n.getLarghezza()/2) & (coordY > n.getY()-n.getAltezza()/2) & (coordX < n.getX()+n.getLarghezza()/2) & (coordY < n.getY()+n.getAltezza()/2    )){
-                n.setColore(Color.green);
-               // disegnaNodi();
-                repaint();
-
+                if (n.getColore().equals(Color.white)) {
+                    n.setColore(Color.green);
+                    FinestraBT.listaSelezionati.add(n.getContenuto());
+                    repaint();
+                }
+                else {
+                    n.setColore(Color.white);
+                    FinestraBT.listaSelezionati.remove(n.getContenuto());
+                    repaint();
+                }
             }
         }
+        System.out.println(FinestraBT.listaSelezionati.size());
     }
 
     @Override
