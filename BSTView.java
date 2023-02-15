@@ -12,6 +12,7 @@ public class BSTView extends JPanel implements MouseListener {
     private final BST a;
     private Boolean tabella = false;
     private Graphics g;
+    private FinestraBT fbt;
     ArrayList<Riga> BSTTab;
 //
     ArrayList<NodoGrafico> ElencoNodi;
@@ -20,7 +21,7 @@ public class BSTView extends JPanel implements MouseListener {
     JTable table;
     JScrollPane scrollPane;
 
-    public BSTView(BST a, int x, int y, int size, ArrayList<Riga> BSTTab,ArrayList<NodoGrafico> ng,ArrayList<Arco> ar) {
+    public BSTView(BST a, int x, int y, int size, ArrayList<Riga> BSTTab,ArrayList<NodoGrafico> ng,ArrayList<Arco> ar,FinestraBT fbt) {
         this.a = a;
         this.root = a.getRadice();
         //  this.x = x;
@@ -30,6 +31,7 @@ public class BSTView extends JPanel implements MouseListener {
         this.BSTTab = BSTTab;
         this.ElencoArchi=ar;
         this.ElencoNodi=ng;
+        this.fbt=fbt;
         table = new JTable(new ModelloBSTTab(BSTTab));
         scrollPane = new JScrollPane(table);
         this.add(scrollPane);
@@ -42,6 +44,7 @@ public class BSTView extends JPanel implements MouseListener {
         super.paintComponent(g);
         this.g=g;
         if (!tabella) {
+            System.out.println("Sono qui");
             scrollPane.setVisible(false);
             this.root = a.getRadice();
             int x = this.getWidth() / 2;
@@ -91,17 +94,18 @@ public class BSTView extends JPanel implements MouseListener {
             if ((coordX > n.getX()-n.getLarghezza()/2) & (coordY > n.getY()-n.getAltezza()/2) & (coordX < n.getX()+n.getLarghezza()/2) & (coordY < n.getY()+n.getAltezza()/2    )){
                 if (n.getColore().equals(Color.white)) {
                     n.setColore(Color.green);
-                    FinestraBT.listaSelezionati.add(n.getContenuto());
+                 //   FinestraBT.listaSelezionati.add(n.getContenuto());
+                    fbt.cambiaListaSelezionati("Add",n.getContenuto());
                     repaint();
                 }
                 else {
                     n.setColore(Color.white);
-                    FinestraBT.listaSelezionati.remove(n.getContenuto());
+                 //   FinestraBT.listaSelezionati.remove(n.getContenuto());
+                    fbt.cambiaListaSelezionati("Del",n.getContenuto());
                     repaint();
                 }
             }
         }
-        System.out.println(FinestraBT.listaSelezionati.size());
     }
 
     @Override
