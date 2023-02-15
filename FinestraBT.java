@@ -1,12 +1,17 @@
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-public class FinestraBT extends JFrame implements ActionListener, ComponentListener {
+public class FinestraBT extends JFrame implements ActionListener, ComponentListener, DocumentListener {
     JTextField JTFNodiDaElaborare;
     JCheckBox JTBTab;
     JCheckBox JCBNum;
     JEditorPane JEPConsole;
+    JButton JBAdd;
+    JButton JBDel;
     BSTView v;
     BST albero;
     int pos = 0;
@@ -38,10 +43,14 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JLabel JLNodi = new JLabel("Nodes (separated by commas)");
         JTFNodiDaElaborare = new JTextField();
         JTFNodiDaElaborare.setColumns(30);
-        JButton JBAdd = new JButton("Add");
+        Document JTFDNodiDaElaborare=JTFNodiDaElaborare.getDocument();
+        JTFDNodiDaElaborare.addDocumentListener(this);
+        JBAdd = new JButton("Add");
         JBAdd.addActionListener(this);
-        JButton JBDel = new JButton("Del");
+        JBAdd.setEnabled(false);
+        JBDel = new JButton("Del");
         JBDel.addActionListener(this);
+        JBDel.setEnabled(false);
         JButton JBBil = new JButton("Balance");
         JBBil.addActionListener(this);
         JTBTab = new JCheckBox("Table");
@@ -331,5 +340,47 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     @Override
     public void componentHidden(ComponentEvent componentEvent) {
 
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent documentEvent) {
+
+        if (JTFNodiDaElaborare.getText().length()>0)
+        {
+            JBAdd.setEnabled(true);
+            JBDel.setEnabled(true);
+        }
+        else {
+            JBAdd.setEnabled(false);
+            JBDel.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent documentEvent) {
+
+        if (JTFNodiDaElaborare.getText().length()>0)
+        {
+            JBAdd.setEnabled(true);
+            JBDel.setEnabled(true);
+        }
+        else {
+            JBAdd.setEnabled(false);
+            JBDel.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent documentEvent) {
+
+        if (JTFNodiDaElaborare.getText().length()>0)
+        {
+            JBAdd.setEnabled(true);
+            JBDel.setEnabled(true);
+        }
+        else {System.out.println("Sono in insertupdate");
+            JBAdd.setEnabled(false);
+            JBDel.setEnabled(false);
+        }
     }
 }
