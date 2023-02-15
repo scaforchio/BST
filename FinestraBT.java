@@ -95,7 +95,8 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
             case "Add":
                 if (!JTFNodiDaElaborare.getText().trim().equals("")) {
                     aggiungiNodi(JTFNodiDaElaborare.getText());
-                    creaAlberoGrafico(albero.getRadice(),dist,40,50,dist/2);
+                    int dimx=this.getWidth()/2;
+                    creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
                 }
                 break;
             case "Del":
@@ -110,13 +111,15 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                         eliminaNodi(cn);
                     }
                 }
-                creaAlberoGrafico(albero.getRadice(),dist,40,50,dist/2);
+                int dimx=this.getWidth()/2;
+                creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
                 listaSelezionati.clear();
                 break;
             case "Balance":
                 bilanciaAlbero();
                 ElencoArchi.clear();
-                creaAlberoGrafico(albero.getRadice(),dist,40,50,dist/2);
+                dimx=this.getWidth()/2;
+                creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
                 break;
             case "Table":
                 visualizzaTabella();
