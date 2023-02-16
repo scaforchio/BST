@@ -102,7 +102,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
             case "Del":
                 if (!JTFNodiDaElaborare.getText().trim().equals("")) {
                     eliminaNodi(JTFNodiDaElaborare.getText());
-
                 }
                 else if(listaSelezionati.size()>0)
                 {
@@ -110,10 +109,12 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                     {
                         eliminaNodi(cn);
                     }
+
                 }
                 int dimx=this.getWidth()/2;
                 creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
                 listaSelezionati.clear();
+                abilitaDisabilitaPulsanti();
                 break;
             case "Balance":
                 bilanciaAlbero();
@@ -230,7 +231,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     }
 
     public void attraversamento(String ordine) {
-        ArrayList<Comparable> lista = null;
+        ArrayList<Comparable> lista = new ArrayList<Comparable>();
         String messaggio = "";
         switch (ordine) {
             case "IN":
@@ -246,12 +247,12 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 lista = albero.attraversamentoPosticipato();
                 break;
         }
+        if (lista!=null)
         for (int i = 0; i < lista.size(); i++) {
             if (i < lista.size() - 1)
                 messaggio += lista.get(i).toString() + " , ";
             else
                 messaggio += lista.get(i).toString() + "";ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
-
         }
         messaggio += "<br><br></b></html>";
         JEPConsole.setText(messaggio);
@@ -266,13 +267,12 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
     public void cambiaListaSelezionati(String tipo, String contenutoNodo)
     {
-
         if (tipo.equals("Add"))
             listaSelezionati.add(contenutoNodo);
         else
             listaSelezionati.remove(contenutoNodo);
         abilitaDisabilitaPulsanti();
-        System.out.println(listaSelezionati.size());
+       // System.out.println(listaSelezionati.size());
     }
     private void eliminaNodoGrafico(String info)
     {
@@ -285,7 +285,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 break;
             }
         }
-
     }
     private void creaAlberoGrafico(NodoBT node, int x, int y, int size, int dist) {
 
@@ -297,7 +296,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 n.setX(x);
                 n.setY(y);
             }
-
             if (node.getSinistra() != null) {
                 int x1 = x - dist;
                 int y1 = y + size * 2;
@@ -310,13 +308,11 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 ElencoArchi.add(new Arco(x,x2,y+size/2,y2-size/2,Color.black,""));
                 creaAlberoGrafico(node.getDestra(), x2, y2, size, dist / 2);
             }
-
         }
     }
 
     private NodoGrafico cercaNodoGrafico(String a)
     {
-
         for (NodoGrafico n : ElencoNodi)
         {
             if (n.getContenuto().equals(a))
@@ -329,10 +325,8 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         int larghezza = r;
         if (lungContenuto <= 3) {
             larghezza=r*2;
-
         } else {
             larghezza=lungContenuto*13;
-
         }
         ElencoNodi.add(new NodoGrafico(x, y, larghezza, r * 2, Color.white, contenuto));
     }
@@ -357,17 +351,14 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
     @Override
     public void componentMoved(ComponentEvent componentEvent) {
-
     }
 
     @Override
     public void componentShown(ComponentEvent componentEvent) {
-
     }
 
     @Override
     public void componentHidden(ComponentEvent componentEvent) {
-
     }
 
     @Override

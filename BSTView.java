@@ -14,17 +14,13 @@ public class BSTView extends JPanel implements MouseListener {
     private Graphics g;
     private FinestraBT fbt;
     ArrayList<Riga> BSTTab;
-//
     ArrayList<NodoGrafico> ElencoNodi;
     ArrayList<Arco> ElencoArchi;
-
     JTable table;
     JScrollPane scrollPane;
-
     public BSTView(BST a, int x, int y, int size, ArrayList<Riga> BSTTab,ArrayList<NodoGrafico> ng,ArrayList<Arco> ar,FinestraBT fbt) {
         this.a = a;
         this.root = a.getRadice();
-        //  this.x = x;
         this.y = y;
         this.size = size;
         this.dist = x / 2;
@@ -44,7 +40,6 @@ public class BSTView extends JPanel implements MouseListener {
         super.paintComponent(g);
         this.g=g;
         if (!tabella) {
-            System.out.println("Sono qui");
             scrollPane.setVisible(false);
             this.root = a.getRadice();
             int x = this.getWidth() / 2;
@@ -75,7 +70,6 @@ public class BSTView extends JPanel implements MouseListener {
             g.drawOval(n.getX()-n.getLarghezza()/2, n.getY()-n.getAltezza()/2, n.getLarghezza(), n.getAltezza());
             g.drawString(n.getContenuto(), n.getX() - (lungContenuto * 13) / 2 + 2, n.getY() + 8);
         }
-
     }
     public void disegnaArchi() {
         ((Graphics2D) g).setStroke(new BasicStroke(3.0f));
