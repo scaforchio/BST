@@ -100,7 +100,6 @@ public class BST {
         }
     }
 
-
     public static int numeroNodi(NodoBT r) {
         if (r != null)
             return 1 + numeroNodi(r.getSinistra()) + numeroNodi(r.getDestra());
@@ -145,7 +144,7 @@ public class BST {
             } else if (n.getDestra() == null) {
                 return n.getSinistra();
             } else {
-                NodoBT successore = trovaSuccessore(n.getDestra());
+                NodoBT successore = trovaMinimo(n.getDestra());
                 n.setInfo(successore.getInfo());
                 n.setDestra(cancellaNodo(n.getDestra(), successore.getInfo()));
             }
@@ -153,22 +152,62 @@ public class BST {
         return n;
     }
 
-    private NodoBT trovaSuccessore(NodoBT n) {
+    private NodoBT trovaMinimo(NodoBT n) {
         while (n.getSinistra() != null) {
             n = n.getSinistra();
         }
         return n;
     }
 
-    private NodoBT trovaPredecessore(NodoBT n) {
+    private NodoBT trovaMassimo(NodoBT n) {
         while (n.getDestra() != null) {
             n = n.getDestra();
         }
         return n;
     }
 
+    public NodoBT trovaSuccessore(NodoBT rad, NodoBT nodo) {
+        // Caso base
+        if (nodo.getDestra() != null) {
+            return trovaMinimo(nodo.getDestra());
+        }
 
-    public void bilanciamento() {
+        NodoBT succ = null;
+        while (rad != null) {
+            if (nodo.getInfo().compareTo(rad.getInfo())<0) {
+                succ = rad;
+                rad = rad.getSinistra();
+            } else if (nodo.getInfo().compareTo(rad.getInfo())>0) {
+                rad = rad.getDestra();
+            } else {
+                break;
+            }
+        }
+
+        return succ;
+    }
+
+    public NodoBT trovaPredecessore(NodoBT rad, NodoBT nodo) {
+        // Caso base
+        if (nodo.getSinistra() != null) {
+            return trovaMassimo(nodo.getSinistra());
+        }
+        NodoBT pred = null;
+        while (rad != null) {
+            if (nodo.getInfo().compareTo(rad.getInfo())>0) {
+                pred = rad;
+                rad = rad.getDestra();
+            } else if (nodo.getInfo().compareTo(rad.getInfo())<0) {
+                rad = rad.getSinistra();
+            } else {
+                break;
+            }
+        }
+        return pred;
+    }
+
+
+     public void bilanciamento() {
         if(getRadice()!=null) {
             BST A2 = new BST();
             this.attraversamentoSimmetrico();

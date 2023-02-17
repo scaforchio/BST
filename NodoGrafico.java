@@ -5,7 +5,7 @@ public class NodoGrafico {
     int y;
     int larghezza;
     int altezza;
-    Color colore;
+        Color colore;
     String contenuto;
 
     public NodoGrafico(int x, int y, int larghezza, int altezza, Color colore, String contenuto) {

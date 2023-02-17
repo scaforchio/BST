@@ -38,8 +38,14 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         CP.setLayout(new BorderLayout());
         CP.add(SP, BorderLayout.CENTER);
         JPanel JPComandi = new JPanel();
-        JPComandi.setLayout(new FlowLayout(FlowLayout.CENTER));
-        JPComandi.setLayout(new GridBagLayout());
+        JPanel JPCostruzione = new JPanel();
+        JPanel JPEsercizi = new JPanel();
+        JPCostruzione.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JPEsercizi.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JPComandi.setLayout(new GridLayout(2,1));
+        JPComandi.add(JPCostruzione);
+        JPComandi.add(JPEsercizi);
+        //JPComandi.setLayout(new GridBagLayout());
         JLabel JLNodi = new JLabel("Nodes (separated by commas)");
         JTFNodiDaElaborare = new JTextField();
         JTFNodiDaElaborare.setColumns(30);
@@ -62,17 +68,19 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JBPreorder.addActionListener(this);
         JButton JBPostorder = new JButton("Postorder");
         JBPostorder.addActionListener(this);
-        JPComandi.add(JLNodi);
-        JPComandi.add(JCBNum);
-        JPComandi.add(JTFNodiDaElaborare);
-        JPComandi.add(JBAdd);
-        JPComandi.add(JBDel);
-        JPComandi.add(new JLabel("                 "));
-        JPComandi.add(JBBil);
-        JPComandi.add(JTBTab);
-        JPComandi.add(JBInorder);
-        JPComandi.add(JBPreorder);
-        JPComandi.add(JBPostorder);
+        JButton JBPredecessore = new JButton("Predecessor");
+        JBPredecessore.addActionListener(this);
+        JPCostruzione.add(JLNodi);
+        JPCostruzione.add(JCBNum);
+        JPCostruzione.add(JTFNodiDaElaborare);
+        JPCostruzione.add(JBAdd);
+        JPCostruzione.add(JBDel);
+       // JPCostruzione.add(new JLabel("                 "));
+        JPEsercizi.add(JBBil);
+        JPEsercizi.add(JTBTab);
+        JPEsercizi.add(JBInorder);
+        JPEsercizi.add(JBPreorder);
+        JPEsercizi.add(JBPostorder);
         getRootPane().setDefaultButton(JBAdd);
         JEPConsole = new JEditorPane();
         JEPConsole.setContentType("text/html");
@@ -134,7 +142,11 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
             case "Postorder":
                 attraversamento("POST");
                 break;
+         /*   case "Predecessor":
+                predecessore();
+                break;    */
         }
+
         JTFNodiDaElaborare.setText("");
         if (albero.getRadice() != null)
             JCBNum.setEnabled(false);
