@@ -169,14 +169,16 @@ public class BST {
 
 
     public void bilanciamento() {
-        BST A2 = new BST();
-        this.attraversamentoSimmetrico();
-        int middle = (lista.size()) / 2;
-        A2.inserisciNodo(lista.get(middle));
-        bilanciamento(A2, 0, middle - 1);
-        bilanciamento(A2, middle + 1, lista.size() - 1);
-        Radice = A2.getRadice();
-        A2.setRadice(null);
+        if(getRadice()!=null) {
+            BST A2 = new BST();
+            this.attraversamentoSimmetrico();
+            int middle = (lista.size()) / 2;
+            A2.inserisciNodo(lista.get(middle));
+            bilanciamento(A2, 0, middle - 1);
+            bilanciamento(A2, middle + 1, lista.size() - 1);
+            Radice = A2.getRadice();
+            A2.setRadice(null);
+        }
     }
 
     private void bilanciamento(BST A2, int a, int b) {

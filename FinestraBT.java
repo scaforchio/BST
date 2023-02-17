@@ -90,7 +90,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         String comando = actionEvent.getActionCommand();
-        System.out.println(comando);
+        //System.out.println(comando);
         switch (comando) {
             case "Add":
                 if (!JTFNodiDaElaborare.getText().trim().equals("")) {
@@ -247,12 +247,12 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 lista = albero.attraversamentoPosticipato();
                 break;
         }
-        if (lista!=null)
         for (int i = 0; i < lista.size(); i++) {
             if (i < lista.size() - 1)
                 messaggio += lista.get(i).toString() + " , ";
             else
-                messaggio += lista.get(i).toString() + "";ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
+                messaggio += lista.get(i).toString() + "";
+            ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
         }
         messaggio += "<br><br></b></html>";
         JEPConsole.setText(messaggio);
