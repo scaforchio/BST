@@ -63,6 +63,26 @@ public class BST {
         else
             return ricercaDato(dato, r.getSinistra());
     }
+    public NodoBT ricercaNodo(Comparable o) {
+        NodoBT dato = new NodoBT(o);
+        if (Radice == null)
+            return null;
+        if (dato.compareTo(Radice) == 0)
+            return Radice;
+        else
+            return ricercaNodo(dato, Radice);
+    }
+
+    private NodoBT ricercaNodo(NodoBT dato, NodoBT r) {
+        if (r == null)
+            return null;
+        if (dato.compareTo(r) == 0)
+            return r;
+        if (dato.compareTo(r) > 0)
+            return ricercaNodo(dato, r.getDestra());
+        else
+            return ricercaNodo(dato, r.getSinistra());
+    }
 
     public ArrayList<Comparable> attraversamentoAnticipato() {
         lista.clear();

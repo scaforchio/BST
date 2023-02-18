@@ -12,6 +12,8 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     JEditorPane JEPConsole;
     JButton JBAdd;
     JButton JBDel;
+    JButton JBPredecessore;
+    JButton JBSuccessore;
     BSTView v;
     BST albero;
     int pos = 0;
@@ -68,8 +70,13 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JBPreorder.addActionListener(this);
         JButton JBPostorder = new JButton("Postorder");
         JBPostorder.addActionListener(this);
-        JButton JBPredecessore = new JButton("Predecessor");
+        JBPredecessore = new JButton("Predecessor");
         JBPredecessore.addActionListener(this);
+        JBPredecessore.setEnabled(false);
+
+        JBSuccessore = new JButton("Successor");
+        JBSuccessore.addActionListener(this);
+        JBSuccessore.setEnabled(false);
         JPCostruzione.add(JLNodi);
         JPCostruzione.add(JCBNum);
         JPCostruzione.add(JTFNodiDaElaborare);
@@ -81,6 +88,8 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JPEsercizi.add(JBInorder);
         JPEsercizi.add(JBPreorder);
         JPEsercizi.add(JBPostorder);
+        JPEsercizi.add(JBSuccessore);
+        JPEsercizi.add(JBPredecessore);
         getRootPane().setDefaultButton(JBAdd);
         JEPConsole = new JEditorPane();
         JEPConsole.setContentType("text/html");
@@ -142,9 +151,12 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
             case "Postorder":
                 attraversamento("POST");
                 break;
-         /*   case "Predecessor":
+            case "Predecessor":
                 predecessore();
-                break;    */
+                break;
+            case "Successor":
+                successore();
+                break;
         }
 
         JTFNodiDaElaborare.setText("");
@@ -270,7 +282,25 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JEPConsole.setText(messaggio);
         JEPConsole.setEnabled(true);
     }
+    private void successore(){
+       NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
 
+
+       NodoBT succ=albero.trovaSuccessore(albero.getRadice(),nodoSelezionato);
+       String messaggio="<br>SUCC: <b>"+succ.getInfo()+"</b><br><br>";
+       JEPConsole.setText(messaggio);
+       JEPConsole.setEnabled(true);
+
+    }
+    private void predecessore(){
+        NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
+
+
+        NodoBT pred=albero.trovaPredecessore(albero.getRadice(),nodoSelezionato);
+        String messaggio="<br>PRED: <b>"+pred.getInfo()+"</b><br><br>";
+        JEPConsole.setText(messaggio);
+        JEPConsole.setEnabled(true);
+    }
     public void svuotaConsole() {
         String messaggio = "<html><br><b>";
         messaggio += "<br><br></b></html>";
@@ -400,6 +430,14 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
         if (listaSelezionati.size()>0)
             JBDel.setEnabled(true);
+        if (listaSelezionati.size()==1) {
+            JBPredecessore.setEnabled(true);
+            JBSuccessore.setEnabled(true);
+        }
+        else {
+            JBPredecessore.setEnabled(false);
+            JBSuccessore.setEnabled(false);
+        }
     }
 }
 
