@@ -86,17 +86,25 @@ public class BSTView extends JPanel implements MouseListener {
         int coordY = mouseEvent.getY();
         for (NodoGrafico n : ElencoNodi) {
             if ((coordX > n.getX()-n.getLarghezza()/2) & (coordY > n.getY()-n.getAltezza()/2) & (coordX < n.getX()+n.getLarghezza()/2) & (coordY < n.getY()+n.getAltezza()/2    )){
-                if (n.getColore().equals(Color.white)) {
+                if (!n.getColore().equals(Color.green)) {
                     n.setColore(Color.green);
                  //   FinestraBT.listaSelezionati.add(n.getContenuto());
-                    fbt.cambiaListaSelezionati("Add",n.getContenuto());
+                    if (fbt.JCBNum.isSelected())
+                        fbt.cambiaListaSelezionati("Add",Double.parseDouble(n.getContenuto()));
+                    else
+                        fbt.cambiaListaSelezionati("Add",n.getContenuto());
+                    fbt.resettaSuccPred();
                     repaint();
                 }
                 else {
                     n.setColore(Color.white);
                  //   FinestraBT.listaSelezionati.remove(n.getContenuto());
+                    if (fbt.JCBNum.isSelected())
+                        fbt.cambiaListaSelezionati("Del",Double.parseDouble(n.getContenuto()));
+                        else
                     fbt.cambiaListaSelezionati("Del",n.getContenuto());
                     repaint();
+                    fbt.resettaSuccPred();
                 }
             }
         }

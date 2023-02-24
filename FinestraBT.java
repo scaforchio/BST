@@ -18,8 +18,8 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     BST albero;
     int pos = 0;
     int dist;
-    public static ArrayList<String> listaSelezionati=new ArrayList<String>();
-
+    // public static ArrayList<String> listaSelezionati=new ArrayList<String>();
+    public static ArrayList<Comparable> listaSelezionati=new ArrayList<Comparable>();
     ArrayList<Riga> BSTTab = new ArrayList<Riga>();
     ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
     ArrayList<Arco> ElencoArchi = new ArrayList<Arco>();
@@ -122,9 +122,9 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 }
                 else if(listaSelezionati.size()>0)
                 {
-                    for(String cn:listaSelezionati)
+                    for(Comparable cn:listaSelezionati)
                     {
-                        eliminaNodi(cn);
+                        eliminaNodi(cn.toString());
                     }
 
                 }
@@ -289,21 +289,21 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     private void successore(){
        NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
        NodoBT succ=albero.trovaSuccessore(albero.getRadice(),nodoSelezionato);
-       String contenutoSuccessore=succ.getInfo().toString();
+       String contenutoSuccessore=normalizzaDouble(succ.getInfo().toString());
        segnalaInRosso(contenutoSuccessore);
-       String messaggio="<br>SUCC: <b>"+succ.getInfo()+"</b><br><br>";
+     /*  String messaggio="<br>SUCC: <b>"+succ.getInfo()+"</b><br><br>";
        JEPConsole.setText(messaggio);
-       JEPConsole.setEnabled(true);
+       JEPConsole.setEnabled(true); */
 
     }
     private void predecessore(){
         NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
         NodoBT pred=albero.trovaPredecessore(albero.getRadice(),nodoSelezionato);
-        String contenutoPredecessore=pred.getInfo().toString();
-        segnalaInRosso(contenutoPredecessore);
-        String messaggio="<br>PRED: <b>"+pred.getInfo()+"</b><br><br>";
+        String contenutoPredecessore=normalizzaDouble(pred.getInfo().toString());
+        segnalaInBlue(contenutoPredecessore);
+     /*   String messaggio="<br>PRED: <b>"+pred.getInfo()+"</b><br><br>";
         JEPConsole.setText(messaggio);
-        JEPConsole.setEnabled(true);
+        JEPConsole.setEnabled(true); */
     }
     public void segnalaInRosso(String contNodo)
     {
@@ -314,20 +314,41 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
         v.repaint();
     }
+
+    public void segnalaInBlue(String contNodo)
+    {
+        for (NodoGrafico n:ElencoNodi)
+        {
+            if(n.getContenuto().equals(contNodo))
+                n.setColore(Color.blue);
+        }
+        v.repaint();
+    }
     public void svuotaConsole() {
         String messaggio = "<html><br><b>";
         messaggio += "<br><br></b></html>";
         JEPConsole.setText(messaggio);
     }
 
-    public void cambiaListaSelezionati(String tipo, String contenutoNodo)
+    public void cambiaListaSelezionati(String tipo, Comparable contenutoNodo)
     {
+
         if (tipo.equals("Add"))
             listaSelezionati.add(contenutoNodo);
         else
             listaSelezionati.remove(contenutoNodo);
         abilitaDisabilitaPulsanti();
        // System.out.println(listaSelezionati.size());
+    }
+
+    public void resettaSuccPred()
+    {
+        for(NodoGrafico n:ElencoNodi)
+        {
+            if (n.getColore().equals(Color.blue) | n.getColore().equals(Color.red))
+                n.setColore(Color.white);
+        }
+        // System.out.println(listaSelezionati.size());
     }
     private void eliminaNodoGrafico(String info)
     {
