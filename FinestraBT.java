@@ -197,11 +197,15 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
         for (String info : elencoNodi) {
             info = info.trim();
-            if (JCBNum.isSelected())
+            if (JCBNum.isSelected()) {
                 albero.cancellaNodo(Double.parseDouble(info));
-            else
+                eliminaNodoGrafico(normalizzaDouble(""+Double.parseDouble(info)));
+            }
+            else {
                 albero.cancellaNodo(info);
-            eliminaNodoGrafico(info);
+                eliminaNodoGrafico(info);
+            }
+
 
         }
         tabella(albero);
@@ -284,9 +288,9 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     }
     private void successore(){
        NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
-
-
        NodoBT succ=albero.trovaSuccessore(albero.getRadice(),nodoSelezionato);
+       String contenutoSuccessore=succ.getInfo().toString();
+       segnalaInRosso(contenutoSuccessore);
        String messaggio="<br>SUCC: <b>"+succ.getInfo()+"</b><br><br>";
        JEPConsole.setText(messaggio);
        JEPConsole.setEnabled(true);
@@ -294,12 +298,21 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     }
     private void predecessore(){
         NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
-
-
         NodoBT pred=albero.trovaPredecessore(albero.getRadice(),nodoSelezionato);
+        String contenutoPredecessore=pred.getInfo().toString();
+        segnalaInRosso(contenutoPredecessore);
         String messaggio="<br>PRED: <b>"+pred.getInfo()+"</b><br><br>";
         JEPConsole.setText(messaggio);
         JEPConsole.setEnabled(true);
+    }
+    public void segnalaInRosso(String contNodo)
+    {
+        for (NodoGrafico n:ElencoNodi)
+        {
+            if(n.getContenuto().equals(contNodo))
+                n.setColore(Color.red);
+        }
+        v.repaint();
     }
     public void svuotaConsole() {
         String messaggio = "<html><br><b>";
