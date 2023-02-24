@@ -5,7 +5,7 @@ import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-public class FinestraBT extends JFrame implements ActionListener, ComponentListener, DocumentListener {
+public class FinestraBT extends JFrame implements ActionListener, ComponentListener, DocumentListener, KeyListener {
     JTextField JTFNodiDaElaborare;
     JCheckBox JTBTab;
     JCheckBox JCBNum;
@@ -53,6 +53,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JTFNodiDaElaborare.setColumns(30);
         Document JTFDNodiDaElaborare=JTFNodiDaElaborare.getDocument();
         JTFDNodiDaElaborare.addDocumentListener(this);
+        JTFNodiDaElaborare.addKeyListener(this);
         JBAdd = new JButton("Add");
         JBAdd.addActionListener(this);
         JBAdd.setEnabled(false);
@@ -101,6 +102,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         setVisible(true);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         dist = (int) screenSize.getWidth()/2;
+        addKeyListener(this);
 
     }
 
@@ -117,26 +119,12 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 }
                 break;
             case "Del":
-                if (!JTFNodiDaElaborare.getText().trim().equals("")) {
-                    eliminaNodi(JTFNodiDaElaborare.getText());
-                }
-                else if(listaSelezionati.size()>0)
-                {
-                    for(Comparable cn:listaSelezionati)
-                    {
-                        eliminaNodi(cn.toString());
-                    }
-
-                }
-                int dimx=this.getWidth()/2;
-                creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
-                listaSelezionati.clear();
-                abilitaDisabilitaPulsanti();
+                eliminaNodi();
                 break;
             case "Balance":
                 bilanciaAlbero();
                 ElencoArchi.clear();
-                dimx=this.getWidth()/2;
+                int dimx=this.getWidth()/2;
                 creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
                 break;
             case "Table":
@@ -472,6 +460,44 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
             JBPredecessore.setEnabled(false);
             JBSuccessore.setEnabled(false);
         }
+    }
+
+    private void eliminaNodi()
+    {
+        if (!JTFNodiDaElaborare.getText().trim().equals("")) {
+            eliminaNodi(JTFNodiDaElaborare.getText());
+        }
+        else if(listaSelezionati.size()>0)
+        {
+            for(Comparable cn:listaSelezionati)
+            {
+                eliminaNodi(cn.toString());
+            }
+
+        }
+        int dimx=this.getWidth()/2;
+        creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
+        listaSelezionati.clear();
+        abilitaDisabilitaPulsanti();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent keyEvent) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+
+        if (keyEvent.getKeyCode()==keyEvent.VK_DELETE)
+        {
+            eliminaNodi();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent keyEvent) {
+
     }
 }
 
