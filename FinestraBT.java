@@ -5,6 +5,8 @@ import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Random;
+
 public class FinestraBT extends JFrame implements ActionListener, ComponentListener, DocumentListener, KeyListener {
     JTextField JTFNodiDaElaborare;
     JCheckBox JTBTab;
@@ -34,7 +36,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
             setTitle("Albero con radice " + root.getInfo().toString());
         else
             setTitle("Albero vuoto");
-        v = new BSTView(albero, 600, 40, 50, BSTTab,ElencoNodi,ElencoArchi,this);
+        v = new BSTView(600, BSTTab,ElencoNodi,ElencoArchi,this);
         JScrollPane SP = new JScrollPane(v);
         Container CP = getContentPane();
         CP.setLayout(new BorderLayout());
@@ -60,6 +62,11 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JBDel = new JButton("Del");
         JBDel.addActionListener(this);
         JBDel.setEnabled(false);
+
+        JButton JBAddRandom = new JButton("Random tree");
+        JBAddRandom.addActionListener(this);
+        //JBAddRandom.setEnabled(false);
+
         JButton JBBil = new JButton("Balance");
         JBBil.addActionListener(this);
         JTBTab = new JCheckBox("Table");
@@ -83,7 +90,8 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JPCostruzione.add(JTFNodiDaElaborare);
         JPCostruzione.add(JBAdd);
         JPCostruzione.add(JBDel);
-       // JPCostruzione.add(new JLabel("                 "));
+        JPCostruzione.add(new JLabel("                 "));
+        JPCostruzione.add(JBAddRandom);
         JPEsercizi.add(JBBil);
         JPEsercizi.add(JTBTab);
         JPEsercizi.add(JBInorder);
@@ -102,29 +110,35 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         setVisible(true);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         dist = (int) screenSize.getWidth()/2;
-        addKeyListener(this);
+        //addKeyListener(this);
 
     }
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         String comando = actionEvent.getActionCommand();
-        //System.out.println(comando);
+        int dimx=0;
+
         switch (comando) {
             case "Add":
                 if (!JTFNodiDaElaborare.getText().trim().equals("")) {
                     aggiungiNodi(JTFNodiDaElaborare.getText());
-                    int dimx=this.getWidth()/2;
+                    dimx=this.getWidth()/2;
                     creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
                 }
                 break;
             case "Del":
                 eliminaNodi();
                 break;
+            case "Random tree":
+                    aggiungiNodi(creaNodiCasuali(1));
+                    dimx=this.getWidth()/2;
+                    creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
+                break;
             case "Balance":
                 bilanciaAlbero();
                 ElencoArchi.clear();
-                int dimx=this.getWidth()/2;
+                dimx=this.getWidth()/2;
                 creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
                 break;
             case "Table":
@@ -148,10 +162,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
 
         JTFNodiDaElaborare.setText("");
-        if (albero.getRadice() != null)
-            JCBNum.setEnabled(false);
-        else
-            JCBNum.setEnabled(true);
+        JCBNum.setEnabled(albero.getRadice() == null);
         JTFNodiDaElaborare.requestFocus();
     }
 
@@ -182,7 +193,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
       //  String nodiDaEliminare = JTFNodiDaElaborare.getText();
         String[] elencoNodi = nodiDaEliminare.split(",");
         JTFNodiDaElaborare.setText("");
-
         for (String info : elencoNodi) {
             info = info.trim();
             if (JCBNum.isSelected()) {
@@ -193,22 +203,17 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 albero.cancellaNodo(info);
                 eliminaNodoGrafico(info);
             }
-
-
         }
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
         svuotaConsole();
-
     }
 
     private void bilanciaAlbero() {
         albero.bilanciamento();
-
         tabella(albero);
         v.ridisegna(JTBTab.isSelected());
         svuotaConsole();
-
     }
 
     private void visualizzaTabella() {
@@ -279,19 +284,12 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
        NodoBT succ=albero.trovaSuccessore(albero.getRadice(),nodoSelezionato);
        String contenutoSuccessore=normalizzaDouble(succ.getInfo().toString());
        segnalaInRosso(contenutoSuccessore);
-     /*  String messaggio="<br>SUCC: <b>"+succ.getInfo()+"</b><br><br>";
-       JEPConsole.setText(messaggio);
-       JEPConsole.setEnabled(true); */
-
     }
     private void predecessore(){
         NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
         NodoBT pred=albero.trovaPredecessore(albero.getRadice(),nodoSelezionato);
         String contenutoPredecessore=normalizzaDouble(pred.getInfo().toString());
         segnalaInBlue(contenutoPredecessore);
-     /*   String messaggio="<br>PRED: <b>"+pred.getInfo()+"</b><br><br>";
-        JEPConsole.setText(messaggio);
-        JEPConsole.setEnabled(true); */
     }
     public void segnalaInRosso(String contNodo)
     {
@@ -320,7 +318,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
     public void cambiaListaSelezionati(String tipo, Comparable contenutoNodo)
     {
-
         if (tipo.equals("Add"))
             listaSelezionati.add(contenutoNodo);
         else
@@ -351,7 +348,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
     }
     private void creaAlberoGrafico(NodoBT node, int x, int y, int size, int dist) {
-
         if (node != null) {
             NodoGrafico n= cercaNodoGrafico(normalizzaDouble(node.getInfo().toString()));
             if (n==null)
@@ -398,7 +394,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     public String normalizzaDouble(String a) {
         String pulita = a;
         if (a.length() > 1)
-            if (a.substring(a.length() - 2, a.length()).equals(".0"))
+            if (a.startsWith(".0", a.length() - 2))
                 pulita = a.replace(".0", "");
         return pulita;
     }
@@ -481,6 +477,33 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         abilitaDisabilitaPulsanti();
     }
 
+    String creaNodiCasuali(int numero)
+    {
+        String elencoNodi="";
+        Random r=new Random();
+        if (JCBNum.isSelected()) {
+            for(int i=1;i<=numero;i++)
+            {
+                double numeroCasuale= r.nextInt(200);
+                elencoNodi+=numeroCasuale+",";
+            }
+            elencoNodi = elencoNodi.substring(0, elencoNodi.length() - 1);
+        }
+        else {
+            for(int i=1;i<=numero;i++)
+            {
+                StringBuilder sb = new StringBuilder();
+                for (int j = 0; j < 2; j++) {
+                    char c = (char)(r.nextInt(26) + 'A');
+                    sb.append(c);
+                }
+                elencoNodi+=sb+",";
+            }
+            elencoNodi = elencoNodi.substring(0, elencoNodi.length() - 1);
+
+        }
+        return elencoNodi;
+    }
     @Override
     public void keyTyped(KeyEvent keyEvent) {
 
@@ -488,11 +511,13 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-
-        if (keyEvent.getKeyCode()==keyEvent.VK_DELETE)
+        if (keyEvent.getKeyCode()== KeyEvent.VK_DELETE)
         {
             eliminaNodi();
         }
+        JTFNodiDaElaborare.setText("");
+        JCBNum.setEnabled(albero.getRadice() == null);
+        JTFNodiDaElaborare.requestFocus();
     }
 
     @Override
