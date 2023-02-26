@@ -21,7 +21,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     int pos = 0;
     int dist;
     // public static ArrayList<String> listaSelezionati=new ArrayList<String>();
-    public static ArrayList<Comparable> listaSelezionati=new ArrayList<Comparable>();
+    public static ArrayList<Comparable> listaSelezionati= new ArrayList<>();
     ArrayList<Riga> BSTTab = new ArrayList<Riga>();
     ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
     ArrayList<Arco> ElencoArchi = new ArrayList<Arco>();
@@ -252,21 +252,21 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     }
 
     public void attraversamento(String ordine) {
-        ArrayList<Comparable> lista = new ArrayList<Comparable>();
+        ArrayList<Comparable> lista = new ArrayList<>();
         String messaggio = "";
         switch (ordine) {
-            case "IN":
+            case "IN" -> {
                 messaggio = "<html><br>INORDER: <b>";
                 lista = albero.attraversamentoSimmetrico();
-                break;
-            case "PRE":
+            }
+            case "PRE" -> {
                 messaggio = "<html><br>PREORDER: <b>";
                 lista = albero.attraversamentoAnticipato();
-                break;
-            case "POST":
+            }
+            case "POST" -> {
                 messaggio = "<html><br>POSTORDER: <b>";
                 lista = albero.attraversamentoPosticipato();
-                break;
+            }
         }
         for (int i = 0; i < lista.size(); i++) {
             if (i < lista.size() - 1)
@@ -351,7 +351,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         if (node != null) {
             NodoGrafico n= cercaNodoGrafico(normalizzaDouble(node.getInfo().toString()));
             if (n==null)
-                creaNodo(x, y, size / 2, normalizzaDouble(node.getInfo().toString()), Color.white);
+                creaNodo(x, y, size / 2, normalizzaDouble(node.getInfo().toString()));
             else {
                 n.setX(x);
                 n.setY(y);
@@ -380,7 +380,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
         return null;
     }
-    private void creaNodo(int x, int y, int r, String contenuto, Color colore) {
+    private void creaNodo(int x, int y, int r, String contenuto) {
         int lungContenuto = contenuto.length();
         int larghezza = r;
         if (lungContenuto <= 3) {

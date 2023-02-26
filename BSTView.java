@@ -8,7 +8,7 @@ public class BSTView extends JPanel implements MouseListener {
      private int dist;
     private Boolean tabella = false;
     private Graphics g;
-    private FinestraBT fbt;
+    private final FinestraBT fbt;
     ArrayList<Riga> BSTTab;
     ArrayList<NodoGrafico> ElencoNodi;
     ArrayList<Arco> ElencoArchi;
