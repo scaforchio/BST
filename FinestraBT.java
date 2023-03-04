@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+
 public class FinestraBT extends JFrame implements ActionListener, ComponentListener, DocumentListener, KeyListener {
     JTextField JTFNodiDaElaborare;
     JCheckBox JTBTab;
@@ -16,27 +17,33 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     JButton JBDel;
     JButton JBPredecessore;
     JButton JBSuccessore;
+    JButton JBPreorder;
+    JButton JBPostorder;
+    JButton JBInorder;
+    JButton JBAddRandom;
+    JButton JBBil;
+
+    String ultimoAttraversato="";
     BSTView v;
     BST albero;
+    Timer t;
+    int poslista=-1;
     int pos = 0;
-    int dist;
-    // public static ArrayList<String> listaSelezionati=new ArrayList<String>();
+ //   int dist;
     public static ArrayList<Comparable> listaSelezionati= new ArrayList<>();
     ArrayList<Riga> BSTTab = new ArrayList<Riga>();
     ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
     ArrayList<Arco> ElencoArchi = new ArrayList<Arco>();
+    ArrayList<Comparable> lista;
 
     public FinestraBT(BST albero) throws Exception {
         this.albero = albero;
-        setSize(new Dimension(1200, 1000));
+        setSize(new Dimension(1000, 1000));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         addComponentListener(this);
         NodoBT root = albero.getRadice();
-        if (root != null)
-            setTitle("Albero con radice " + root.getInfo().toString());
-        else
-            setTitle("Albero vuoto");
-        v = new BSTView(600, BSTTab,ElencoNodi,ElencoArchi,this);
+        setTitle("Binary search tree");
+        v = new BSTView(BSTTab,ElencoNodi,ElencoArchi,this);
         JScrollPane SP = new JScrollPane(v);
         Container CP = getContentPane();
         CP.setLayout(new BorderLayout());
@@ -49,7 +56,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JPComandi.setLayout(new GridLayout(2,1));
         JPComandi.add(JPCostruzione);
         JPComandi.add(JPEsercizi);
-        //JPComandi.setLayout(new GridBagLayout());
         JLabel JLNodi = new JLabel("Nodes (separated by commas)");
         JTFNodiDaElaborare = new JTextField();
         JTFNodiDaElaborare.setColumns(30);
@@ -63,20 +69,19 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JBDel.addActionListener(this);
         JBDel.setEnabled(false);
 
-        JButton JBAddRandom = new JButton("Random tree");
+        JBAddRandom = new JButton("Random tree");
         JBAddRandom.addActionListener(this);
-        //JBAddRandom.setEnabled(false);
 
-        JButton JBBil = new JButton("Balance");
+        JBBil = new JButton("Balance");
         JBBil.addActionListener(this);
         JTBTab = new JCheckBox("Table");
         JTBTab.addActionListener(this);
         JCBNum = new JCheckBox("Numeric order");
-        JButton JBInorder = new JButton("Inorder");
+        JBInorder = new JButton("Inorder");
         JBInorder.addActionListener(this);
-        JButton JBPreorder = new JButton("Preorder");
+        JBPreorder = new JButton("Preorder");
         JBPreorder.addActionListener(this);
-        JButton JBPostorder = new JButton("Postorder");
+        JBPostorder = new JButton("Postorder");
         JBPostorder.addActionListener(this);
         JBPredecessore = new JButton("Predecessor");
         JBPredecessore.addActionListener(this);
@@ -109,8 +114,9 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
         setVisible(true);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        dist = (int) screenSize.getWidth()/2;
-        //addKeyListener(this);
+     //   dist = (int) screenSize.getWidth()/2;
+        t=new Timer(1000,this);
+        t.setActionCommand("Time");
 
     }
 
@@ -146,19 +152,45 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 break;
             case "Inorder":
                 attraversamento("IN");
+
                 break;
             case "Preorder":
                 attraversamento("PRE");
+
                 break;
             case "Postorder":
                 attraversamento("POST");
+
                 break;
             case "Predecessor":
                 predecessore();
+
                 break;
             case "Successor":
                 successore();
+
                 break;
+            case "Time":
+                poslista++;
+                if (poslista==lista.size()) {
+                    t.stop();
+                    for(Comparable n: lista)
+                        segnala(normalizzaDouble(n.toString()),Color.white);
+                    JBInorder.setEnabled(true);
+                    JBPostorder.setEnabled(true);
+                    JBPreorder.setEnabled(true);
+                    JBAddRandom.setEnabled(true);
+                    JTBTab.setEnabled(true);
+                    JBBil.setEnabled(true);
+                    ultimoAttraversato="";
+                }
+                else{
+                    segnala(ultimoAttraversato,Color.yellow);
+                    segnala(normalizzaDouble(lista.get(poslista).toString()),Color.orange);
+                    ultimoAttraversato=normalizzaDouble(lista.get(poslista).toString());
+                }
+
+
         }
 
         JTFNodiDaElaborare.setText("");
@@ -167,8 +199,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     }
 
     private void aggiungiNodi(String nodiDaAggiungere) {
-
-      //  String nodiDaAggiungere = JTFNodiDaElaborare.getText();
         String[] elencoNodi = nodiDaAggiungere.split(",");
 
         for (String info : elencoNodi) {
@@ -190,8 +220,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     }
 
     private void eliminaNodi(String nodiDaEliminare) {
-      //  String nodiDaEliminare = JTFNodiDaElaborare.getText();
-        String[] elencoNodi = nodiDaEliminare.split(",");
+       String[] elencoNodi = nodiDaEliminare.split(",");
         JTFNodiDaElaborare.setText("");
         for (String info : elencoNodi) {
             info = info.trim();
@@ -252,7 +281,16 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     }
 
     public void attraversamento(String ordine) {
-        ArrayList<Comparable> lista = new ArrayList<>();
+        poslista=-1;
+
+        JBInorder.setEnabled(false);
+        JBPostorder.setEnabled(false);
+        JBPreorder.setEnabled(false);
+        JBAddRandom.setEnabled(false);
+        JTBTab.setEnabled(false);
+        JBBil.setEnabled(false);
+
+        lista = new ArrayList<>();
         String messaggio = "";
         switch (ordine) {
             case "IN" -> {
@@ -270,11 +308,11 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
         for (int i = 0; i < lista.size(); i++) {
             if (i < lista.size() - 1)
-                messaggio += lista.get(i).toString() + " , ";
+                messaggio += normalizzaDouble(lista.get(i).toString()) + " , ";
             else
-                messaggio += lista.get(i).toString() + "";
-            ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
+                messaggio += normalizzaDouble(lista.get(i).toString()) + "";
         }
+        t.start();
         messaggio += "<br><br></b></html>";
         JEPConsole.setText(messaggio);
         JEPConsole.setEnabled(true);
@@ -283,30 +321,20 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
        NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
        NodoBT succ=albero.trovaSuccessore(albero.getRadice(),nodoSelezionato);
        String contenutoSuccessore=normalizzaDouble(succ.getInfo().toString());
-       segnalaInRosso(contenutoSuccessore);
+       segnala(contenutoSuccessore,Color.red);
     }
     private void predecessore(){
         NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
         NodoBT pred=albero.trovaPredecessore(albero.getRadice(),nodoSelezionato);
         String contenutoPredecessore=normalizzaDouble(pred.getInfo().toString());
-        segnalaInBlue(contenutoPredecessore);
+        segnala(contenutoPredecessore,Color.blue);
     }
-    public void segnalaInRosso(String contNodo)
+    public void segnala(String contNodo, Color c)
     {
         for (NodoGrafico n:ElencoNodi)
         {
             if(n.getContenuto().equals(contNodo))
-                n.setColore(Color.red);
-        }
-        v.repaint();
-    }
-
-    public void segnalaInBlue(String contNodo)
-    {
-        for (NodoGrafico n:ElencoNodi)
-        {
-            if(n.getContenuto().equals(contNodo))
-                n.setColore(Color.blue);
+                n.setColore(c);
         }
         v.repaint();
     }
