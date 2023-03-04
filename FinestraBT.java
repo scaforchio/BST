@@ -293,8 +293,9 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     }
 
     public void attraversamento(String ordine) {
-        poslista=-1;
+
         if (albero.getRadice()!=null) {
+            poslista=-1;
             JBInorder.setEnabled(false);
             JBPostorder.setEnabled(false);
             JBPreorder.setEnabled(false);
