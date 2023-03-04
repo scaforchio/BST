@@ -21,6 +21,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     JButton JBPostorder;
     JButton JBInorder;
     JButton JBAddRandom;
+    JButton JBReset;
     JButton JBBil;
 
     String ultimoAttraversato="";
@@ -71,7 +72,8 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
         JBAddRandom = new JButton("Random tree");
         JBAddRandom.addActionListener(this);
-
+        JBReset = new JButton("Reset");
+        JBReset.addActionListener(this);
         JBBil = new JButton("Balance");
         JBBil.addActionListener(this);
         JTBTab = new JCheckBox("Table");
@@ -97,6 +99,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JPCostruzione.add(JBDel);
         JPCostruzione.add(new JLabel("                 "));
         JPCostruzione.add(JBAddRandom);
+        JPCostruzione.add(JBReset);
         JPEsercizi.add(JBBil);
         JPEsercizi.add(JTBTab);
         JPEsercizi.add(JBInorder);
@@ -141,6 +144,14 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                     dimx=this.getWidth()/2;
                     creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
                 break;
+            case "Reset":
+                albero.setRadice(null);
+                dimx=this.getWidth()/2;
+                ElencoArchi.clear();
+                ElencoNodi.clear();
+                //creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
+                v.ridisegna(JTBTab.isSelected());
+                break;
             case "Balance":
                 bilanciaAlbero();
                 ElencoArchi.clear();
@@ -182,6 +193,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                     JBAddRandom.setEnabled(true);
                     JTBTab.setEnabled(true);
                     JBBil.setEnabled(true);
+                    JBReset.setEnabled(true);
                     ultimoAttraversato="";
                 }
                 else{
@@ -282,40 +294,42 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
     public void attraversamento(String ordine) {
         poslista=-1;
+        if (albero.getRadice()!=null) {
+            JBInorder.setEnabled(false);
+            JBPostorder.setEnabled(false);
+            JBPreorder.setEnabled(false);
+            JBAddRandom.setEnabled(false);
+            JTBTab.setEnabled(false);
+            JBBil.setEnabled(false);
+            JBReset.setEnabled(false);
 
-        JBInorder.setEnabled(false);
-        JBPostorder.setEnabled(false);
-        JBPreorder.setEnabled(false);
-        JBAddRandom.setEnabled(false);
-        JTBTab.setEnabled(false);
-        JBBil.setEnabled(false);
-
-        lista = new ArrayList<>();
-        String messaggio = "";
-        switch (ordine) {
-            case "IN" -> {
-                messaggio = "<html><br>INORDER: <b>";
-                lista = albero.attraversamentoSimmetrico();
+            lista = new ArrayList<>();
+            String messaggio = "";
+            switch (ordine) {
+                case "IN" -> {
+                    messaggio = "<html><br>INORDER: <b>";
+                    lista = albero.attraversamentoSimmetrico();
+                }
+                case "PRE" -> {
+                    messaggio = "<html><br>PREORDER: <b>";
+                    lista = albero.attraversamentoAnticipato();
+                }
+                case "POST" -> {
+                    messaggio = "<html><br>POSTORDER: <b>";
+                    lista = albero.attraversamentoPosticipato();
+                }
             }
-            case "PRE" -> {
-                messaggio = "<html><br>PREORDER: <b>";
-                lista = albero.attraversamentoAnticipato();
+            for (int i = 0; i < lista.size(); i++) {
+                if (i < lista.size() - 1)
+                    messaggio += normalizzaDouble(lista.get(i).toString()) + " , ";
+                else
+                    messaggio += normalizzaDouble(lista.get(i).toString()) + "";
             }
-            case "POST" -> {
-                messaggio = "<html><br>POSTORDER: <b>";
-                lista = albero.attraversamentoPosticipato();
-            }
+            t.start();
+            messaggio += "<br><br></b></html>";
+            JEPConsole.setText(messaggio);
+            JEPConsole.setEnabled(true);
         }
-        for (int i = 0; i < lista.size(); i++) {
-            if (i < lista.size() - 1)
-                messaggio += normalizzaDouble(lista.get(i).toString()) + " , ";
-            else
-                messaggio += normalizzaDouble(lista.get(i).toString()) + "";
-        }
-        t.start();
-        messaggio += "<br><br></b></html>";
-        JEPConsole.setText(messaggio);
-        JEPConsole.setEnabled(true);
     }
     private void successore(){
        NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
