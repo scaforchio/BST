@@ -63,6 +63,36 @@ public class BST {
         else
             return ricercaDato(dato, r.getSinistra());
     }
+
+    public ArrayList<Comparable> cercaPercorso(Comparable obiettivo ) {
+        lista.clear();
+        cercaPercorso(getRadice(),new NodoBT(obiettivo));
+        return lista;
+    }
+
+    public void cercaPercorso(NodoBT nodo,NodoBT obiettivo ) {
+        if (nodo==null)
+            return;
+        else if (obiettivo.compareTo(nodo)>0)
+        {
+            lista.add(nodo.getInfo());
+            cercaPercorso(nodo.getDestra(),obiettivo);
+        }
+        else if (obiettivo.compareTo(nodo)<0)
+        {
+            lista.add(nodo.getInfo());
+            cercaPercorso(nodo.getSinistra(),obiettivo);
+        }
+        else if (obiettivo.compareTo(nodo)==0)
+        {
+            lista.add(nodo.getInfo());
+            return;
+
+        }
+
+    }
+
+
     public NodoBT ricercaNodo(Comparable o) {
         NodoBT dato = new NodoBT(o);
         if (Radice == null)
