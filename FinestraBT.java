@@ -158,6 +158,8 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 break;
             case "Reset":
                 albero.setRadice(null);
+                listaSelezionati.clear();
+                abilitaDisabilitaPulsanti();
                 dimx=this.getWidth()/2;
                 ElencoArchi.clear();
                 ElencoNodi.clear();
@@ -353,7 +355,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
             lista=albero.cercaPercorso(Double.parseDouble(JTFNodiDaElaborare.getText()));
         else
             lista=albero.cercaPercorso(JTFNodiDaElaborare.getText());
-        String messaggio="";
+        String messaggio="SEARCH PATH: ";
         for (int i = 0; i < lista.size(); i++) {
             if (i < lista.size() - 1)
                 messaggio += normalizzaDouble(lista.get(i).toString()) + " , ";
