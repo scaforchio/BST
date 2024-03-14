@@ -184,6 +184,7 @@ public class BST {
             return null;
         }
 
+
         if (c.compareTo(n.getInfo()) < 0) {
             n.setSinistra(cancellaNodo(n.getSinistra(), c));
         } else if (c.compareTo(n.getInfo()) > 0) {
@@ -197,6 +198,34 @@ public class BST {
                 NodoBT successore = trovaMinimo(n.getDestra());
                 n.setInfo(successore.getInfo());
                 n.setDestra(cancellaNodo(n.getDestra(), successore.getInfo()));
+            }
+        }
+        return n;
+    }
+
+    public void cancellaNodo(Comparable c, boolean prec) {
+        Radice = cancellaNodo(Radice, c, prec);
+    }
+
+    private NodoBT cancellaNodo(NodoBT n, Comparable c, boolean prec) {
+        if (n == null) {
+            return null;
+        }
+
+
+        if (c.compareTo(n.getInfo()) < 0) {
+            n.setSinistra(cancellaNodo(n.getSinistra(), c, true));
+        } else if (c.compareTo(n.getInfo()) > 0) {
+            n.setDestra(cancellaNodo(n.getDestra(), c,true));
+        } else {
+            if (n.getSinistra() == null) {
+                return n.getDestra();
+            } else if (n.getDestra() == null) {
+                return n.getSinistra();
+            } else {
+                NodoBT predecessore = trovaMassimo(n.getSinistra());
+                n.setInfo(predecessore.getInfo());
+                n.setSinistra(cancellaNodo(n.getSinistra(), predecessore.getInfo(),true));
             }
         }
         return n;
@@ -257,7 +286,7 @@ public class BST {
     }
 
 
-     public void bilanciamento() {
+    public void bilanciamento() {
         if(getRadice()!=null) {
             BST A2 = new BST();
             this.attraversamentoSimmetrico();

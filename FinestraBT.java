@@ -7,11 +7,11 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-
 public class FinestraBT extends JFrame implements ActionListener, ComponentListener, DocumentListener, KeyListener {
     JTextField JTFNodiDaElaborare;
     JCheckBox JTBTab;
     JCheckBox JCBNum;
+    JCheckBox JCDPredecessor;
     JEditorPane JEPConsole;
     JButton JBAdd;
     JButton JBDel;
@@ -24,7 +24,6 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     JButton JBAddRandom;
     JButton JBReset;
     JButton JBBil;
-
     String ultimoAttraversato="";
     String nodoDaCercare;
     BSTView v;
@@ -33,7 +32,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     Timer timerRicerca;
     int poslista=-1;
     int pos = 0;
- //   int dist;
+    //   int dist;
     public static ArrayList<Comparable> listaSelezionati= new ArrayList<>();
     ArrayList<Riga> BSTTab = new ArrayList<Riga>();
     ArrayList<NodoGrafico> ElencoNodi = new ArrayList<NodoGrafico>();
@@ -60,6 +59,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JPComandi.setLayout(new GridLayout(2,1));
         JPComandi.add(JPCostruzione);
         JPComandi.add(JPEsercizi);
+        JLabel JLZoom = new JLabel("Per zoom fare scroll     ");
         JLabel JLNodi = new JLabel("Nodes (separated by commas)");
         JTFNodiDaElaborare = new JTextField();
         JTFNodiDaElaborare.setColumns(30);
@@ -72,6 +72,8 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JBDel = new JButton("Del");
         JBDel.addActionListener(this);
         JBDel.setEnabled(false);
+        JCDPredecessor=new JCheckBox("Del predecessor");
+        JCDPredecessor.addActionListener(this);
         JBSearch = new JButton("Search");
         JBSearch.addActionListener(this);
         JBSearch.setEnabled(false);
@@ -94,6 +96,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JBPredecessore.addActionListener(this);
         JBPredecessore.setEnabled(false);
 
+        JPCostruzione.add(JLZoom);
         JBSuccessore = new JButton("Successor");
         JBSuccessore.addActionListener(this);
         JBSuccessore.setEnabled(false);
@@ -102,6 +105,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JPCostruzione.add(JTFNodiDaElaborare);
         JPCostruzione.add(JBAdd);
         JPCostruzione.add(JBDel);
+        JPCostruzione.add(JCDPredecessor);
         JPCostruzione.add(JBSearch);
         JPCostruzione.add(new JLabel("                 "));
         JPCostruzione.add(JBAddRandom);
@@ -123,7 +127,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
         setVisible(true);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-     //   dist = (int) screenSize.getWidth()/2;
+        //   dist = (int) screenSize.getWidth()/2;
         timerAttraversamento =new Timer(1000,this);
         timerAttraversamento.setActionCommand("TimeAttr");
         timerRicerca =new Timer(1000,this);
@@ -152,9 +156,9 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 ricerca();
                 break;
             case "Random tree":
-                    aggiungiNodi(creaNodiCasuali(1));
-                    dimx=this.getWidth()/2;
-                    creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
+                aggiungiNodi(creaNodiCasuali(1));
+                dimx=this.getWidth()/2;
+                creaAlberoGrafico(albero.getRadice(),dimx,40,50,dimx/2);
                 break;
             case "Reset":
                 albero.setRadice(null);
@@ -203,13 +207,14 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
                 scorriPerRicerca();
                 break;
-//TODO separare timer per attraversamenti da quello per rocerca
+            //TODO separare timer per attraversamenti da quello per rocerca
         }
 
         JTFNodiDaElaborare.setText("");
         JCBNum.setEnabled(albero.getRadice() == null);
         JTFNodiDaElaborare.requestFocus();
     }
+
     private void scorriPerRicerca()
     {
         poslista++;
@@ -243,6 +248,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
 
     }
+
     private void scorriPerAttraversamento()
     {
         poslista++;
@@ -265,6 +271,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
             ultimoAttraversato=normalizzaDouble(lista.get(poslista).toString());
         }
     }
+
     private void aggiungiNodi(String nodiDaAggiungere) {
         String[] elencoNodi = nodiDaAggiungere.split(",");
 
@@ -287,15 +294,25 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     }
 
     private void eliminaNodi(String nodiDaEliminare) {
-       String[] elencoNodi = nodiDaEliminare.split(",");
+        String[] elencoNodi = nodiDaEliminare.split(",");
         JTFNodiDaElaborare.setText("");
         for (String info : elencoNodi) {
             info = info.trim();
             if (JCBNum.isSelected()) {
+                if(JCDPredecessor.isSelected()==true)
+                {
+                    albero.cancellaNodo(Double.parseDouble(info), true);
+                    eliminaNodoGrafico(normalizzaDouble(""+Double.parseDouble(info)));
+                }
                 albero.cancellaNodo(Double.parseDouble(info));
                 eliminaNodoGrafico(normalizzaDouble(""+Double.parseDouble(info)));
             }
             else {
+                if(JCDPredecessor.isSelected()==true)
+                {
+                    albero.cancellaNodo(info,true);
+                    eliminaNodoGrafico(info);
+                }
                 albero.cancellaNodo(info);
                 eliminaNodoGrafico(info);
             }
@@ -346,6 +363,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
             }
         }
     }
+
     public void ricerca()
     {
         poslista=-1;
@@ -367,6 +385,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         JEPConsole.setText(messaggio);
         JEPConsole.setEnabled(true);
     }
+
     public void attraversamento(String ordine) {
 
         if (albero.getRadice()!=null) {
@@ -411,17 +430,19 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     //TODO Fare in modo che NodoBT lavori sia con Stringhe che con Double e il Check Box influenzi solo i valori da inserire
     private void successore(){
 
-       NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
-       NodoBT succ=albero.trovaSuccessore(albero.getRadice(),nodoSelezionato);
-       String contenutoSuccessore=normalizzaDouble(succ.getInfo().toString());
-       segnala(contenutoSuccessore,Color.red);
+        NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
+        NodoBT succ=albero.trovaSuccessore(albero.getRadice(),nodoSelezionato);
+        String contenutoSuccessore=normalizzaDouble(succ.getInfo().toString());
+        segnala(contenutoSuccessore,Color.red);
     }
+
     private void predecessore(){
         NodoBT nodoSelezionato=albero.ricercaNodo(listaSelezionati.get(0));
         NodoBT pred=albero.trovaPredecessore(albero.getRadice(),nodoSelezionato);
         String contenutoPredecessore=normalizzaDouble(pred.getInfo().toString());
         segnala(contenutoPredecessore,Color.blue);
     }
+
     public void segnala(String contNodo, Color c)
     {
         for (NodoGrafico n:ElencoNodi)
@@ -431,6 +452,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
         v.repaint();
     }
+
     public void svuotaConsole() {
         String messaggio = "<html><br><b>";
         messaggio += "<br><br></b></html>";
@@ -444,7 +466,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         else
             listaSelezionati.remove(contenutoNodo);
         abilitaDisabilitaPulsanti();
-       // System.out.println(listaSelezionati.size());
+        // System.out.println(listaSelezionati.size());
     }
 
     public void resettaSuccPred()
@@ -456,6 +478,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
         // System.out.println(listaSelezionati.size());
     }
+
     public String normalizzaDouble(String a) {
         String pulita = a;
         if (a.length() > 1)
@@ -463,6 +486,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
                 pulita = a.replace(".0", "");
         return pulita;
     }
+
     private void eliminaNodoGrafico(String info)
     {
         for(int i=0;i<ElencoNodi.size();i++)
@@ -475,6 +499,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
             }
         }
     }
+
     private void creaAlberoGrafico(NodoBT node, int x, int y, int size, int dist) {
         if (node != null) {
             NodoGrafico n= cercaNodoGrafico(normalizzaDouble(node.getInfo().toString()));
@@ -508,6 +533,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
         return null;
     }
+
     private void creaNodo(int x, int y, int r, String contenuto) {
         int lungContenuto = contenuto.length();
         int larghezza = r;
@@ -520,11 +546,10 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     }
 
 
-
     @Override
     public void componentResized(ComponentEvent componentEvent) {
-           ElencoArchi.clear();
-      //  ElencoNodi.clear();
+        ElencoArchi.clear();
+        //  ElencoNodi.clear();
         NodoBT rad=albero.getRadice();
         int dimx=this.getWidth()/2;
         creaAlberoGrafico(rad, dimx, 40, 50, dimx/2);
@@ -557,6 +582,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
     public void changedUpdate(DocumentEvent documentEvent) {
         abilitaDisabilitaPulsanti();
     }
+
     private void abilitaDisabilitaPulsanti()
     {
         if (JTFNodiDaElaborare.getText().length()>0)
@@ -628,6 +654,7 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
         }
         return elencoNodi;
     }
+
     @Override
     public void keyTyped(KeyEvent keyEvent) {
 
@@ -650,4 +677,3 @@ public class FinestraBT extends JFrame implements ActionListener, ComponentListe
 
     }
 }
-
